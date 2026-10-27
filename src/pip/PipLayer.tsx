@@ -213,7 +213,7 @@ export function PipLayer() {
                       {t.title}
                       {i === 0 && <span className="rounded-full bg-cyan-soft px-1.5 text-[10px] font-semibold text-cyan">Start here</span>}
                     </span>
-                    <span className="block truncate text-[11.5px] text-text-2">{available ? t.summary : 'Arrives with the next build milestone'}</span>
+                    <span className="block truncate text-[11.5px] text-text-2">{t.summary}</span>
                   </span>
                   {available && (
                     <span className="inline-flex shrink-0 items-center gap-1 text-[11px] text-text-3 tabular">

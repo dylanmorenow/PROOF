@@ -17,18 +17,6 @@ function EmptyFrame({ eyebrow, title, body, children }: { eyebrow: string; title
   )
 }
 
-export function PlaceholderPage({ title }: { title: string }) {
-  return (
-    <EmptyFrame eyebrow="Next build milestone" title={title} body="This module is being assembled on the same data model as the Overview, so every figure here will reconcile with the command center.">
-      <Link to="/">
-        <Button variant="secondary">
-          <ArrowLeft /> Back to Overview
-        </Button>
-      </Link>
-    </EmptyFrame>
-  )
-}
-
 export function NotFoundPage() {
   return (
     <EmptyFrame eyebrow="404 · Not found" title="Nothing verified here" body="This page does not exist in the PROOF Room prototype. Every real page is one click away in the sidebar.">

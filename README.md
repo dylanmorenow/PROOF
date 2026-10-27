@@ -40,8 +40,8 @@ npm run build      # static output in dist/
 |---|---|---|
 | 1 | Foundation, Overview, PIP, Tour A (Welcome) | Done |
 | 2 | Operations, Service Detail, Evidence Center, Performance, Tour B | Done |
-| 3 | Outcome Ledger, Tour C | Next |
-| 4 | Motion polish, QA, slide screenshots, judge demo script | Planned |
+| 3 | Outcome Ledger, Tour C | Done |
+| 4 | Motion polish, QA, slide screenshots, judge demo script | Next |
 
 ## Deployment
 

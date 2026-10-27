@@ -79,7 +79,6 @@ for (const [w, h] of SIZES) {
 {
   const { page } = await open('', 1440, 900)
   await page.click('[data-tour="pip"]', { force: true })
-  await page.getByRole('menuitem').filter({ hasText: 'Welcome' }).click()
   await page.waitForTimeout(800)
   await page.keyboard.press('ArrowRight')
   await page.waitForTimeout(900)
@@ -92,7 +91,7 @@ for (const [w, h] of SIZES) {
   await page.keyboard.press('Escape')
   await page.waitForTimeout(600)
   const left = await page.evaluate(() => ({ overlay: !!document.querySelector('.tour-ring'), flag: document.documentElement.dataset.tour }))
-  if (t1 !== 'Active operations' || t2 !== 'Your command center') problems.push(`keyboard: arrows landed on "${t1}" then "${t2}"`)
+  if (t1 !== 'On-time delivery' || t2 !== 'Active operations') problems.push(`keyboard: arrows landed on "${t1}" then "${t2}"`)
   if (left.overlay || left.flag) problems.push('keyboard: Escape left the tour overlay behind')
   await page.close()
 }
@@ -101,10 +100,9 @@ for (const [w, h] of SIZES) {
 {
   const { page, errors } = await open('', 1440, 900, { reducedMotion: 'reduce' })
   await page.click('[data-tour="pip"]', { force: true })
-  await page.getByRole('menuitem').filter({ hasText: 'Welcome' }).click()
-  for (let i = 0; i < 3; i++) {
+  for (let i = 0; i < 2; i++) {
     await page.waitForTimeout(700)
-    await page.getByRole('button', { name: /Start tour|Next step/ }).click()
+    await page.getByRole('button', { name: /Next step/ }).click()
   }
   await page.waitForTimeout(700)
   const ok = await page.evaluate(() => getComputedStyle(document.querySelector('.tour-ring')).opacity === '1')

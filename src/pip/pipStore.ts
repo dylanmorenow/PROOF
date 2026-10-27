@@ -16,14 +16,12 @@ interface PipState {
   gaze: { x: number; y: number } | null
   /** Halo progress 0..1 — the five P.R.O.O.F. segments light up as a tour advances. */
   progress: number
-  pickerOpen: boolean
   setMood: (m: PipMood) => void
   /** Play a transient reaction, then return to the resting mood. */
   react: (m: 'success' | 'unavailable' | 'celebrating', ms?: number) => void
   setAnchor: (a: PipAnchor | null) => void
   setGaze: (g: { x: number; y: number } | null) => void
   setProgress: (p: number) => void
-  setPickerOpen: (open: boolean) => void
 }
 
 let reactionTimer: ReturnType<typeof setTimeout> | undefined
@@ -34,7 +32,6 @@ export const usePip = create<PipState>((set, get) => ({
   anchor: null,
   gaze: null,
   progress: 0,
-  pickerOpen: false,
   setMood: (mood) => {
     restingMood = mood
     if (!reactionTimer) set({ mood })
@@ -51,7 +48,6 @@ export const usePip = create<PipState>((set, get) => ({
   setAnchor: (anchor) => set({ anchor }),
   setGaze: (gaze) => set({ gaze }),
   setProgress: (progress) => set({ progress }),
-  setPickerOpen: (pickerOpen) => set({ pickerOpen }),
 }))
 
 /** Decide once whether the 3D mascot is appropriate for this device. */

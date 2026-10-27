@@ -1,6 +1,5 @@
 import { create } from 'zustand'
 import { usePip } from '@/pip/pipStore'
-import { TOURS } from './tours'
 import type { TourDef } from './types'
 
 interface TourState {
@@ -8,7 +7,7 @@ interface TourState {
   index: number
   /** +1 forward, -1 back — used to slide card content in the travel direction. */
   direction: 1 | -1
-  start: (id: string) => void
+  start: (tour: TourDef) => void
   next: () => void
   back: () => void
   goTo: (i: number) => void
@@ -19,13 +18,7 @@ export const useTour = create<TourState>((set, get) => ({
   tour: null,
   index: 0,
   direction: 1,
-  start: (id) => {
-    const tour = TOURS.find((t) => t.id === id)
-    if (!tour || !tour.steps.length) {
-      usePip.getState().react('unavailable')
-      return
-    }
-    usePip.getState().setPickerOpen(false)
+  start: (tour) => {
     set({ tour, index: 0, direction: 1 })
   },
   next: () => {

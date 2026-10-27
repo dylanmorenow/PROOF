@@ -108,7 +108,10 @@ describe('evidence', () => {
   it('the hero order carries five records, three verified-or-better plus the pending report flow', () => {
     const recs = ds.evidence.filter((e) => e.workOrderId === HERO_WORK_ORDER)
     expect(recs).toHaveLength(5)
-    expect(recs.find((r) => r.type === 'service-report')!.versions).toHaveLength(2)
+    const report = recs.find((r) => r.type === 'service-report')!
+    expect(report.versions).toHaveLength(2)
+    // The Evidence tour opens this record by id.
+    expect(report.id).toBe('EV-3904')
   })
 
   it('customer scope partitions evidence', () => {

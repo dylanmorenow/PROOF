@@ -1,8 +1,9 @@
-import { ArrowRight, Clock, X } from 'lucide-react'
+import { ArrowRight, X } from 'lucide-react'
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
-import { lazy, Suspense, useEffect, useRef, useState } from 'react'
+import { lazy, Suspense, useEffect, useState } from 'react'
+import { useLocation } from 'react-router'
 import { useTour } from '@/tour/tourStore'
-import { TOURS } from '@/tour/tours'
+import { tourFor } from '@/tour/tours'
 import { cx } from '@/lib/cx'
 import { spring } from '@/motion/tokens'
 import { PipFallback } from './PipFallback'
@@ -15,12 +16,17 @@ const BOX = 120
 const DOCK = 80
 const DOCK_MARGIN = 20
 
+/** Layout viewport (excludes scrollbars), matching what CSS `right`/`bottom` measure from. */
 function useViewport() {
-  const [vp, setVp] = useState({ w: window.innerWidth, h: window.innerHeight })
+  const read = () => ({ w: document.documentElement.clientWidth, h: document.documentElement.clientHeight })
+  const [vp, setVp] = useState(read)
   useEffect(() => {
-    const on = () => setVp({ w: window.innerWidth, h: window.innerHeight })
+    const on = () => setVp(read())
+    // A scrollbar appearing changes clientWidth without a resize event, so watch the root element too.
+    const ro = new ResizeObserver(on)
+    ro.observe(document.documentElement)
     window.addEventListener('resize', on)
-    return () => window.removeEventListener('resize', on)
+    return () => (ro.disconnect(), window.removeEventListener('resize', on))
   }, [])
   return vp
 }
@@ -36,16 +42,17 @@ function safeSession(key: string, value?: string) {
 }
 
 export function PipLayer() {
-  const { mood, anchor, progress, pickerOpen, setMood, setPickerOpen } = usePip()
+  const { mood, anchor, progress, setMood } = usePip()
   const touring = useTour((s) => !!s.tour)
   const startTour = useTour((s) => s.start)
+  const { pathname } = useLocation()
   const reduce = useReducedMotion()
   const vp = useViewport()
   const [use3D] = useState(canRender3D)
   const [ready3D, setReady3D] = useState(false)
   const [visible, setVisible] = useState(true)
   const [nudge, setNudge] = useState(false)
-  const rootRef = useRef<HTMLDivElement>(null)
+  const startHere = () => startTour(tourFor(pathname))
 
   // Load the 3D chunk once the page is idle, so it never competes with first paint.
   useEffect(() => {
@@ -62,31 +69,18 @@ export function PipLayer() {
     return () => document.removeEventListener('visibilitychange', on)
   }, [])
 
-  // A quiet first-visit invitation — never an auto-started tour.
+  // A quiet first-visit invitation, never an auto-started tour.
   useEffect(() => {
     if (safeSession('pip-nudged')) return
     const t = setTimeout(() => setNudge(true), 3200)
     return () => clearTimeout(t)
   }, [])
   useEffect(() => {
-    if (touring || pickerOpen) {
+    if (touring) {
       setNudge(false)
       safeSession('pip-nudged', '1')
     }
-  }, [touring, pickerOpen])
-
-  // Close the picker on outside click / Escape.
-  useEffect(() => {
-    if (!pickerOpen) return
-    const onDown = (e: PointerEvent) => !rootRef.current?.contains(e.target as Node) && setPickerOpen(false)
-    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setPickerOpen(false)
-    window.addEventListener('pointerdown', onDown)
-    window.addEventListener('keydown', onKey)
-    return () => {
-      window.removeEventListener('pointerdown', onDown)
-      window.removeEventListener('keydown', onKey)
-    }
-  }, [pickerOpen, setPickerOpen])
+  }, [touring])
 
   const dockSize = vp.w < 640 ? 60 : DOCK
   const dock = { x: vp.w - DOCK_MARGIN - dockSize / 2, y: vp.h - DOCK_MARGIN - dockSize / 2, size: dockSize }
@@ -107,7 +101,6 @@ export function PipLayer() {
       </div>
 
       <motion.div
-        ref={rootRef}
         className="fixed top-0 left-0 z-[95]"
         style={{ width: BOX, height: BOX, transformOrigin: '50% 50%' }}
         initial={false}
@@ -116,12 +109,10 @@ export function PipLayer() {
       >
         <button
           type="button"
-          aria-label={touring ? 'PIP, your guide' : 'Open guided tours with PIP'}
-          aria-haspopup="menu"
-          aria-expanded={pickerOpen}
+          aria-label={touring ? 'PIP, your guide' : 'Start the guided tour for this page'}
           data-tour="pip"
           disabled={touring}
-          onClick={() => setPickerOpen(!pickerOpen)}
+          onClick={startHere}
           onMouseEnter={() => !touring && setMood('attentive')}
           onMouseLeave={() => !touring && setMood('idle')}
           onFocus={() => !touring && setMood('attentive')}
@@ -140,9 +131,9 @@ export function PipLayer() {
         </button>
       </motion.div>
 
-      {/* Hover label + first-visit nudge */}
+      {/* First-visit nudge */}
       <AnimatePresence>
-        {!touring && !pickerOpen && nudge && (
+        {!touring && nudge && (
           <motion.button
             key="nudge"
             initial={{ opacity: 0, x: 10, scale: 0.96 }}
@@ -151,9 +142,9 @@ export function PipLayer() {
             transition={spring.smooth}
             onClick={() => {
               setNudge(false)
-              startTour('welcome')
+              startHere()
             }}
-            className="fixed z-[94] flex items-center gap-2 rounded-full border border-line bg-white/90 backdrop-blur-xl py-2 pr-2 pl-4 text-[13px] font-medium text-text-1 shadow-[var(--shadow-raised)] hover:bg-white"
+            className="fixed z-[94] flex items-center gap-2 rounded-full border border-line bg-white/90 py-2 pr-2 pl-4 text-[13px] font-medium text-text-1 shadow-[var(--shadow-raised)] backdrop-blur-xl hover:bg-white"
             style={{ right: DOCK_MARGIN + dockSize + 12, bottom: DOCK_MARGIN + dockSize / 2 - 19 }}
           >
             New here? Take a quick tour
@@ -174,58 +165,6 @@ export function PipLayer() {
               <X className="size-3.5" />
             </span>
           </motion.button>
-        )}
-      </AnimatePresence>
-
-      {/* Tour picker */}
-      <AnimatePresence>
-        {pickerOpen && !touring && (
-          <motion.div
-            role="menu"
-            aria-label="Guided tours"
-            initial={{ opacity: 0, y: 10, scale: 0.97 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 6, scale: 0.98, transition: { duration: 0.12 } }}
-            transition={spring.smooth}
-            className="fixed z-[96] w-[320px] origin-bottom-right rounded-[18px] border border-line bg-white/90 p-2 shadow-[var(--shadow-raised)] backdrop-blur-xl"
-            style={{ right: DOCK_MARGIN, bottom: DOCK_MARGIN + dockSize + 12 }}
-            onPointerDown={(e) => e.stopPropagation()}
-          >
-            <div className="px-3 pt-2.5 pb-2">
-              <div className="text-[13.5px] font-semibold text-text-1">Guided tours with PIP</div>
-              <div className="text-[12px] text-text-2">Pick a walkthrough. Esc exits at any time.</div>
-            </div>
-            {TOURS.map((t, i) => {
-              const available = t.steps.length > 0
-              return (
-                <button
-                  key={t.id}
-                  role="menuitem"
-                  disabled={!available}
-                  autoFocus={i === 0}
-                  onClick={() => startTour(t.id)}
-                  className="group flex w-full items-center gap-3 rounded-[10px] px-3 py-2.5 text-left outline-none transition-colors hover:bg-black/[.04] focus-visible:bg-black/[.04] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-transparent"
-                >
-                  <span className="grid size-8 shrink-0 place-items-center rounded-full bg-teal-soft text-[12px] font-semibold text-cyan">
-                    {String.fromCharCode(65 + i)}
-                  </span>
-                  <span className="min-w-0 flex-1">
-                    <span className="flex items-center gap-2 text-[13px] font-medium text-text-1">
-                      {t.title}
-                      {i === 0 && <span className="rounded-full bg-cyan-soft px-1.5 text-[10px] font-semibold text-cyan">Start here</span>}
-                    </span>
-                    <span className="block truncate text-[11.5px] text-text-2">{t.summary}</span>
-                  </span>
-                  {available && (
-                    <span className="inline-flex shrink-0 items-center gap-1 text-[11px] text-text-3 tabular">
-                      <Clock className="size-3" />
-                      {t.duration}
-                    </span>
-                  )}
-                </button>
-              )
-            })}
-          </motion.div>
         )}
       </AnimatePresence>
     </>

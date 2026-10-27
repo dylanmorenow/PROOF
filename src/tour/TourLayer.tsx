@@ -300,9 +300,6 @@ function TourOverlay({ tour }: { tour: TourDef }) {
   }, [end, next, back])
 
   const last = index === tour.steps.length - 1
-  // The intro invitation is not counted as a step.
-  const steps = tour.steps.filter((x) => !x.intro)
-  const stepNo = steps.indexOf(step) + 1
   const hasHole = !!box && phase === 'ready'
   const blockHole = hasHole && !step.interactive
 
@@ -334,7 +331,7 @@ function TourOverlay({ tour }: { tour: TourDef }) {
 
 
       <div className="sr-only" aria-live="polite">
-        {step.intro ? step.title : `Step ${stepNo} of ${steps.length}, ${step.title}`}
+        {`Step ${index + 1} of ${tour.steps.length}, ${step.title}`}
       </div>
 
       {/* Explanation card */}
@@ -381,30 +378,19 @@ function TourOverlay({ tour }: { tour: TourDef }) {
         </div>
 
         <div className="flex items-center gap-2 px-5 pt-5 pb-5">
-          {step.intro ? (
-            <>
-              <Button size="sm" variant="ghost" className="ml-auto" onClick={() => end()}>
-                Not now
-              </Button>
-              <Button size="sm" variant="primary" onClick={next} aria-label="Start tour">
-                Start tour
-              </Button>
-            </>
-          ) : (
-            <>
-              <div className="mr-auto flex gap-1.5" aria-hidden="true">
-                {steps.map((s, i) => (
-                  <span key={s.id} className={cx('size-1.5 rounded-full transition-colors duration-300', i === stepNo - 1 ? 'bg-cyan' : 'bg-black/15')} />
-                ))}
-              </div>
-              <Button size="sm" variant="secondary" onClick={back} aria-label="Previous step">
-                <ArrowLeft /> Back
-              </Button>
-              <Button size="sm" variant="primary" onClick={next} aria-label={last ? 'Finish tour' : 'Next step'}>
-                {last ? 'Done' : 'Next'} {!last && <ArrowRight />}
-              </Button>
-            </>
+          <div className="mr-auto flex gap-1.5" aria-hidden="true">
+            {tour.steps.map((s, i) => (
+              <span key={s.id} className={cx('size-1.5 rounded-full transition-colors duration-300', i === index ? 'bg-cyan' : 'bg-black/15')} />
+            ))}
+          </div>
+          {index > 0 && (
+            <Button size="sm" variant="secondary" onClick={back} aria-label="Previous step">
+              <ArrowLeft /> Back
+            </Button>
           )}
+          <Button size="sm" variant="primary" onClick={next} aria-label={last ? 'Finish tour' : 'Next step'}>
+            {last ? 'Done' : 'Next'} {!last && <ArrowRight />}
+          </Button>
         </div>
       </motion.div>
       {/* Guide line, drawn above the card so it visibly leaves PIP and lands on the spotlight */}

@@ -11,14 +11,13 @@ console.log('renderer', await page.evaluate(() => { const c = document.createEle
 console.log('idle fps', await fps())
 await page.click('[data-tour="pip"]', { force: true })
 await page.waitForTimeout(300)
-await page.getByRole('menuitem').first().click()
 await page.waitForTimeout(1500)
 console.log('tour fps', await fps())
-await page.getByRole('button', { name: /Start tour|Next step/ }).click()
+await page.getByRole('button', { name: /Next step/ }).click()
 console.log('transition 1→2 fps', await fps())
 for (const label of ['2→3', '3→4', '4→5']) {
   await page.waitForTimeout(1200)
-  await page.getByRole('button', { name: /Start tour|Next step/ }).click()
+  await page.getByRole('button', { name: /Next step/ }).click()
   console.log('transition', label, 'fps', await fps())
 }
 await browser.close()

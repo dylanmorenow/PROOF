@@ -42,7 +42,7 @@ export function EvidencePage() {
     <div className="flex flex-col gap-6">
       <h1 className="type-display text-[32px] leading-tight">Evidence</h1>
 
-      <div className="max-w-full overflow-x-auto" data-tour="ev.tabs">
+      <div className="max-w-full self-start overflow-x-auto" data-tour="ev.tabs">
         <SegmentedControl
           label="Evidence status"
           value={tab}

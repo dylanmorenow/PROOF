@@ -38,7 +38,7 @@ About 5 minutes. Live at **https://dylanmorenow.github.io/PROOF/**
 
 ## 3. PIP and the guided tour (40 s)
 
-**Do** click **PIP**, the crystal in the sidebar, and choose **Welcome to PROOF Room**. Click **Start tour** and go through two or three steps with **→**.
+**Do** click **PIP**, the crystal in the bottom-right corner. The tour for the page you are on starts right away. Go through two or three steps with **→**. Every page has its own tour.
 
 **Say** "PIP is our onboarding guide. A new customer learns the workspace in about a minute, and every step is one plain sentence on what this is and why it matters."
 

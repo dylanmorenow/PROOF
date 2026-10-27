@@ -10,7 +10,7 @@
 | KPI definitions | `src/data/selectors.ts` | Every number in the UI is computed here. |
 | Ledger maths | `src/data/ledger.ts` | Rounds verified availability to 0.1 pp, caps eligible points, adds adjustments. |
 | Map geography | `scripts/build-map.ts` then `npm run map` | Regenerates `src/features/network-map/geo.generated.ts` from Natural Earth (via `world-atlas`). |
-| Guided-tour steps | `src/tour/tours.ts` | Each step: `target` (a `data-tour` attribute), optional `route`, `placement`, `prepare`/`cleanup`, and the What / Why / Try copy. Add `data-tour="…"` to any element to make it a target. |
+| Guided-tour steps | `src/tour/tours.ts` | Each step: `target` (a `data-tour` attribute), optional `route`, `placement`, `prepare`/`cleanup`, and a one-paragraph `body`. `tourFor()` at the bottom of the file picks which tour PIP starts on each page. Add `data-tour="…"` to any element to make it a target. |
 | PIP appearance | `src/pip/PipCanvas.tsx` (3D) and `src/pip/PipFallback.tsx` (SVG) | Crystal profile in `crystalGeometry()`, material in `<meshPhysicalMaterial>`, halo segments in `Halo`. Moods and reactions live in `src/pip/pipStore.ts`. Force a renderer with `?pip=svg` or `?pip=3d`. |
 | Deployment base path | `.github/workflows/deploy.yml` (`PAGES_BASE`) and `vite.config.ts` | Defaults to `/<repository name>/` on Pages and `/` locally. |
 

@@ -6,17 +6,7 @@ const closeMobileNav = () => useApp.getState().setMobileNav(false)
 
 export const WELCOME: TourDef = {
   id: 'welcome',
-  title: 'Welcome to PROOF Room',
-  summary: 'The command center in one minute',
-  duration: '1 min',
   steps: [
-    {
-      id: 'intro',
-      route: '/',
-      intro: true,
-      title: "Hi, I'm PIP",
-      body: 'Want a quick look around PROOF Room? It takes about a minute.',
-    },
     {
       id: 'hero',
       route: '/',
@@ -98,9 +88,6 @@ export const WELCOME: TourDef = {
 
 export const SERVICE: TourDef = {
   id: 'service',
-  title: 'Service tracking',
-  summary: 'Follow one work order from plan to proof',
-  duration: '1 min',
   steps: [
     {
       id: 'table',
@@ -172,9 +159,6 @@ export const SERVICE: TourDef = {
 
 export const LEDGER: TourDef = {
   id: 'ledger',
-  title: 'Outcome Ledger',
-  summary: 'The Paid-on-Proof concept',
-  duration: '1 min',
   steps: [
     {
       id: 'concept',
@@ -243,4 +227,149 @@ export const LEDGER: TourDef = {
   ],
 }
 
-export const TOURS: TourDef[] = [WELCOME, SERVICE, LEDGER]
+export const DETAIL: TourDef = {
+  id: 'detail',
+  steps: [
+    {
+      id: 'header',
+      target: 'detail.header',
+      placement: 'bottom-start',
+      title: 'This work order',
+      body: 'The job at a glance with its status and priority. When the work is complete, Acknowledge service closes it on your side.',
+    },
+    {
+      id: 'facts',
+      target: 'detail.facts',
+      placement: 'right-start',
+      title: 'Regional delivery',
+      body: 'Who is doing the work and where. Local vendors carry their qualification status, so you know the team on site has been checked.',
+    },
+    {
+      id: 'timeline',
+      target: 'detail.timeline',
+      placement: 'right-start',
+      title: 'Milestone timeline',
+      body: 'Every step from mobilisation to your acknowledgment, with real dates. A step that slipped shows in amber, so delays are never hidden.',
+    },
+    {
+      id: 'evidence',
+      target: 'detail.evidence',
+      placement: 'left-start',
+      title: 'Supporting evidence',
+      body: 'Permits, photos, readings and reports behind this job. The chain on each record shows whether it is only uploaded or already verified.',
+    },
+    {
+      id: 'exceptions',
+      target: 'detail.exceptions',
+      placement: 'left-start',
+      title: 'Exceptions',
+      body: 'Anything that went off plan on this job and what was done about it, so nothing is hidden from you.',
+    },
+  ],
+}
+
+/** A verified report with two versions, so every evidence step has something to show. */
+const EVIDENCE_RECORD = '/evidence?id=EV-3904'
+
+export const EVIDENCE: TourDef = {
+  id: 'evidence',
+  steps: [
+    {
+      id: 'tabs',
+      route: EVIDENCE_RECORD,
+      target: 'ev.tabs',
+      placement: 'bottom-start',
+      interactive: true,
+      title: 'Evidence by status',
+      body: 'Every record sorted by where it stands, from waiting for verification to acknowledged by you. Each tab shows how many records sit there.',
+    },
+    {
+      id: 'list',
+      route: EVIDENCE_RECORD,
+      target: 'ev.list',
+      placement: 'right-start',
+      title: 'Records',
+      body: 'The newest records first, with the work order they belong to. The chain on the right shows how far each one has gone.',
+    },
+    {
+      id: 'record',
+      route: EVIDENCE_RECORD,
+      target: 'ev.record',
+      placement: 'left-start',
+      title: 'One record, fully traced',
+      body: 'When it was captured, uploaded, verified and acknowledged, who checked it, and a fingerprint of the file. Nothing is taken on trust.',
+    },
+    {
+      id: 'actions',
+      route: EVIDENCE_RECORD,
+      target: 'ev.actions',
+      placement: 'left-start',
+      title: 'Your decision',
+      body: 'Verified evidence waits for your acknowledgment. If something looks wrong, a record can be sent back for re-capture.',
+    },
+    {
+      id: 'versions',
+      route: EVIDENCE_RECORD,
+      target: 'ev.versions',
+      placement: 'left-end',
+      title: 'Version history',
+      body: 'Every upload is kept. This report was rejected once for a missing signature, then verified on its second version.',
+    },
+  ],
+}
+
+export const PERFORMANCE: TourDef = {
+  id: 'performance',
+  steps: [
+    {
+      id: 'kpis',
+      route: '/performance',
+      target: 'perf.kpis',
+      placement: 'bottom-start',
+      title: 'This period against the last',
+      body: 'The three service measures for the chosen period, each compared with the period before, so you see the direction and not only the level.',
+    },
+    {
+      id: 'trend',
+      route: '/performance',
+      target: 'perf.trend',
+      placement: 'bottom',
+      title: 'Monthly trend',
+      body: 'On-time delivery and SLA month by month against the 90% target, so a dip is easy to spot.',
+    },
+    {
+      id: 'regions',
+      route: '/performance',
+      target: 'perf.regions',
+      placement: 'right-start',
+      title: 'By region',
+      body: 'How each regional hub performs side by side, including its open exceptions.',
+    },
+    {
+      id: 'exceptions',
+      route: '/performance',
+      target: 'perf.exceptions',
+      placement: 'left-start',
+      title: 'Exceptions raised',
+      body: 'What went off plan this period grouped by cause, so recurring problems stand out.',
+    },
+    {
+      id: 'export',
+      route: '/performance',
+      target: 'perf.export',
+      placement: 'bottom-end',
+      title: 'Export report',
+      body: 'Turns this page into a printable report you can save as PDF and share.',
+    },
+  ],
+}
+
+/** PIP starts the tour for the page you are on. */
+export function tourFor(pathname: string): TourDef {
+  if (pathname.startsWith('/operations/')) return DETAIL
+  if (pathname.startsWith('/operations')) return SERVICE
+  if (pathname.startsWith('/evidence')) return EVIDENCE
+  if (pathname.startsWith('/performance')) return PERFORMANCE
+  if (pathname.startsWith('/outcome-ledger')) return LEDGER
+  return WELCOME
+}

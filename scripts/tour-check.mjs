@@ -1,5 +1,6 @@
 // Runs a guided tour in a real browser, screenshots every step and checks spotlight accuracy.
-// Usage: node scripts/tour-check.mjs <baseUrl> <outDir> [tourLetter=A] [width=1440] [height=900] [--scroll=y]
+// Usage: node scripts/tour-check.mjs <baseUrl> <outDir> [tour=A] [width=1440] [height=900] [--scroll=y]
+// Tours: A Overview, B Operations, C Outcome Ledger, D Evidence, E Performance, F Service Detail.
 import { chromium } from '@playwright/test'
 import { mkdirSync } from 'node:fs'
 
@@ -13,13 +14,12 @@ const errors = []
 page.on('console', (m) => m.type() === 'error' && errors.push(m.text()))
 page.on('pageerror', (e) => errors.push(String(e)))
 await page.addInitScript(() => sessionStorage.setItem('proof-signed-in', '1'))
-await page.goto(base, { waitUntil: 'networkidle' })
+const PAGE = { A: '', B: 'operations', C: 'outcome-ledger', D: 'evidence', E: 'performance', F: 'operations/WO-26-0417' }[letter]
+await page.goto(base + PAGE, { waitUntil: 'networkidle' })
 await page.waitForTimeout(1500)
 if (scroll) await page.evaluate((y) => window.scrollTo(0, y), +scroll)
 
 await page.click('[data-tour="pip"]', { force: true })
-await page.waitForTimeout(400)
-await page.getByRole('menuitem').filter({ hasText: letter === 'A' ? 'Welcome' : letter === 'B' ? 'Service' : 'Outcome' }).click()
 
 let failures = 0
 for (let i = 0; i < 20; i++) {
@@ -61,7 +61,7 @@ for (let i = 0; i < 20; i++) {
     await finish.click()
     break
   }
-  await page.getByRole('button', { name: /Next step|Skip step|Start tour/ }).click()
+  await page.getByRole('button', { name: /Next step/ }).click()
 }
 await page.waitForTimeout(900)
 await page.screenshot({ path: `${out}/after.png` })

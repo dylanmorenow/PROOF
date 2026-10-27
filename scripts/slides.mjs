@@ -8,9 +8,10 @@ const out = 'docs/screenshots'
 mkdirSync(out, { recursive: true })
 const browser = await chromium.launch({ args: ['--use-angle=d3d11', '--enable-gpu', '--ignore-gpu-blocklist'] })
 
-async function shot(name, path, { w = 1920, h = 1080, dpr = 1, before } = {}) {
+async function shot(name, path, { w = 1920, h = 1080, dpr = 1, before, landing } = {}) {
   const page = await browser.newPage({ viewport: { width: w, height: h }, deviceScaleFactor: dpr })
   await page.addInitScript(() => sessionStorage.setItem('pip-nudged', '1'))
+  if (!landing) await page.addInitScript(() => sessionStorage.setItem('proof-signed-in', '1'))
   await page.goto(base + path, { waitUntil: 'networkidle' })
   await page.waitForTimeout(2200)
   if (before) await before(page)
@@ -31,6 +32,8 @@ const tour = (label, n) => async (page) => {
   await page.waitForTimeout(1600)
 }
 
+await shot('00-sign-in', '', { landing: true, before: (p) => p.waitForTimeout(2500) })
+await shot('00-sign-in-phone', '', { landing: true, w: 390, h: 844, dpr: 3, before: (p) => p.waitForTimeout(2500) })
 await shot('01-overview', '')
 await shot('02-strategy-lens', '', { before: async (p) => (await p.keyboard.press('l'), p.waitForTimeout(500)) })
 await shot('03-tour-welcome', '', { before: tour('Welcome', 4) })

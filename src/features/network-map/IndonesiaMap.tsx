@@ -84,6 +84,7 @@ export function IndonesiaMap({
               strokeWidth="1.5"
               strokeDasharray="4 6"
               strokeLinecap="round"
+              className={reduce ? '' : '[animation:link-flow_2.4s_linear_infinite]'}
               initial={reduce ? false : { opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.6, delay: 0.5 + i * 0.08 }}

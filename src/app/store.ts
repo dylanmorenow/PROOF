@@ -4,6 +4,10 @@ import { DEMO_NOW, DEMO_TODAY } from '@/data/dates'
 import type { AccountScope, Dataset, EvidenceRecord, PeriodId, WorkOrder } from '@/data/types'
 
 interface AppState {
+  /** Demo sign-in: any click on Sign in enters. Remembered for the browser session. */
+  signedIn: boolean
+  signIn: () => void
+  signOut: () => void
   dataset: Dataset
   account: AccountScope
   period: PeriodId
@@ -44,7 +48,27 @@ const updateWorkOrder = (ds: Dataset, id: string, fn: (w: WorkOrder) => WorkOrde
   workOrders: ds.workOrders.map((w) => (w.id === id ? fn(w) : w)),
 })
 
+const SESSION_KEY = 'proof-signed-in'
+const readSession = () => {
+  try {
+    return sessionStorage.getItem(SESSION_KEY) === '1'
+  } catch {
+    return false
+  }
+}
+const writeSession = (on: boolean) => {
+  try {
+    if (on) sessionStorage.setItem(SESSION_KEY, '1')
+    else sessionStorage.removeItem(SESSION_KEY)
+  } catch {
+    /* storage unavailable: sign-in lasts for this page only */
+  }
+}
+
 export const useApp = create<AppState>((set) => ({
+  signedIn: readSession(),
+  signIn: () => (writeSession(true), set({ signedIn: true })),
+  signOut: () => (writeSession(false), set({ signedIn: false, aboutOpen: false })),
   dataset: buildDataset(),
   account: 'all',
   period: '30d',

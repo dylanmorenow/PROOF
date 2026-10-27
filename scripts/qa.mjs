@@ -15,12 +15,14 @@ const SIZES = [
 const problems = []
 const browser = await chromium.launch({ args: ['--use-angle=d3d11', '--enable-gpu', '--ignore-gpu-blocklist'] })
 
-async function open(path, w, h, opts = {}) {
-  const page = await browser.newPage({ viewport: { width: w, height: h }, ...opts })
+async function open(path, w, h, { landing, ...opts } = {}) {
+  opts.landing = landing
+  const page = await browser.newPage({ viewport: { width: w, height: h }, reducedMotion: opts.reducedMotion })
   const errors = []
   page.on('console', (m) => m.type() === 'error' && !m.text().includes('status of 404') && errors.push(m.text()))
   page.on('pageerror', (e) => errors.push(String(e)))
   await page.addInitScript(() => sessionStorage.setItem('pip-nudged', '1'))
+  if (!opts.landing) await page.addInitScript(() => sessionStorage.setItem('proof-signed-in', '1'))
   await page.goto(base + path, { waitUntil: 'networkidle' })
   await page.waitForTimeout(1200)
   return { page, errors }
@@ -36,6 +38,21 @@ for (const [w, h] of SIZES) {
     if (errors.length) problems.push(`${name}: ${errors.join(' | ')}`)
     await page.close()
   }
+}
+
+// Sign-in screen at three sizes, then Sign in lands on the requested page.
+for (const [w, h] of SIZES) {
+  const { page, errors } = await open('operations', w, h, { landing: true })
+  await page.waitForTimeout(2500)
+  const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)
+  await page.screenshot({ path: `${out}/${w}-sign-in.png` })
+  await page.getByRole('button', { name: /Sign in/ }).click()
+  await page.waitForTimeout(2600)
+  const h1 = await page.locator('h1').first().textContent()
+  if (h1 !== 'Operations') problems.push(`sign-in ${w}: landed on "${h1}" instead of Operations`)
+  if (overflow > 1) problems.push(`sign-in ${w}: page scrolls sideways by ${overflow}px`)
+  if (errors.length) problems.push(`sign-in ${w}: ${errors.join(' | ')}`)
+  await page.close()
 }
 
 // Every account renders every page without errors.

@@ -10,6 +10,7 @@ import { fmtUsd } from '@/lib/format'
 import { usePip } from '@/pip/pipStore'
 import { Button } from '@/ui/Button'
 import { Card } from '@/ui/Card'
+import { CountUp } from '@/motion/useCountUp'
 import { ProofChain } from '@/ui/ProofChain'
 
 const STAGES = ['Calculated', 'Customer review', 'Commercial approval', 'Settlement draft']
@@ -53,7 +54,7 @@ export function LedgerPage() {
               role="radio"
               aria-checked={on}
               onClick={() => setParams({ c: c.id })}
-              className={cx('surface-card p-5 text-left transition-colors active:scale-[.99]', on ? '!border-teal ring-1 ring-teal' : 'hover:bg-surface-3/60')}
+              className={cx('surface-card p-5 text-left transition-[transform,box-shadow,background-color] duration-300 hover:-translate-y-0.5 hover:shadow-[var(--shadow-raised)] active:scale-[.99]', on ? '!border-teal ring-1 ring-teal' : 'hover:bg-surface-3/60')}
             >
               <div className="text-[15px] font-semibold">{c.name}</div>
               <div className="mt-0.5 text-[13px] text-text-2">{customer(c.customerId)}</div>
@@ -69,11 +70,15 @@ export function LedgerPage() {
             <div className="grid grid-cols-2 gap-6">
               <div data-tour="ledger.baseline">
                 <div className="eyebrow">Contract baseline</div>
-                <div className="type-display mt-1 text-[32px] tabular">{r.baselinePct.toFixed(1)}%</div>
+                <div className="type-display mt-1 text-[32px] tabular">
+                  <CountUp value={r.baselinePct} format={(n) => `${n.toFixed(1)}%`} />
+                </div>
               </div>
               <div data-tour="ledger.verified">
                 <div className="eyebrow">Verified</div>
-                <div className={cx('type-display mt-1 text-[32px] tabular', above ? 'text-verified' : 'text-amber')}>{r.verifiedPct.toFixed(1)}%</div>
+                <div className={cx('type-display mt-1 text-[32px] tabular', above ? 'text-verified' : 'text-amber')}>
+                  <CountUp value={r.verifiedPct} format={(n) => `${n.toFixed(1)}%`} delay={0.15} />
+                </div>
               </div>
             </div>
             <div data-tour="ledger.improvement" className="mt-6">

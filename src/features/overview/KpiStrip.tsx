@@ -87,7 +87,7 @@ export function KpiStrip({ data }: { data: OverviewData }) {
   return (
     <section aria-label="Key performance indicators" data-tour="kpi.strip" data-lens="C" data-lens-label={LENS_LABEL.C} className="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-5">
       {tiles.map((t, i) => (
-        <motion.div key={t.tour} variants={rise} initial="hidden" animate="show" custom={i} data-tour={t.tour} className={cx('surface-card', i === 4 && 'col-span-2 md:col-span-1')}>
+        <motion.div key={t.tour} variants={rise} initial="hidden" animate="show" custom={i} data-tour={t.tour} whileHover={{ y: -3, boxShadow: 'var(--shadow-raised)' }} className={cx('surface-card', i === 4 && 'col-span-2 md:col-span-1')}>
           <Link to={t.to} className="flex h-full flex-col gap-1 rounded-[inherit] p-5 transition-colors hover:bg-surface-3/60 active:scale-[.99]">
             <Tooltip content={t.definition}>
               <span className="eyebrow self-start">{t.label}</span>

@@ -15,6 +15,7 @@ PROOF Room is an interactive, frontend-only product prototype for the **P.R.O.O.
 
 ## Highlights
 
+- **Sign-in scene**, a Three.js dotted globe that reveals outward from Indonesia, with the four hubs, live links, floating hexagonal seals and PIP in orbit. Sign in dives the camera into Indonesia and opens the workspace on the requested page.
 - **Overview command center** — narrative headline, five KPIs with sparklines and period deltas, an accurate Indonesia network map (Natural Earth), performance trend, decisions queue, Proof Chain funnel and activity feed.
 - **PIP, the PROOF Intelligence Partner** — a 3D crystalline companion (React Three Fiber) with an SVG fallback for low-power devices, no WebGL and reduced motion.
 - **Guided tours** — a custom spotlight engine: dimmed and blurred backdrop, a pixel-accurate animated cut-out around the real DOM element, Floating UI card placement, route-aware target resolution, keyboard control and a phone bottom-sheet mode.

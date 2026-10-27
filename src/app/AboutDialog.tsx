@@ -11,7 +11,7 @@ const MAPPING = [
 ]
 
 export function AboutDialog() {
-  const { aboutOpen, setAboutOpen, resetDemo } = useApp()
+  const { aboutOpen, setAboutOpen, resetDemo, signOut } = useApp()
   return (
     <Dialog.Root open={aboutOpen} onOpenChange={setAboutOpen}>
       <Dialog.Portal>
@@ -50,15 +50,20 @@ export function AboutDialog() {
 
           <div className="mt-6 flex items-center justify-between gap-3 border-t border-line pt-5">
             <span className="text-[12px] text-text-3">Press L for the Strategy lens and [ to collapse the sidebar</span>
-            <Button
-              size="sm"
-              onClick={() => {
-                resetDemo()
-                setAboutOpen(false)
-              }}
-            >
-              Reset demo data
-            </Button>
+            <div className="flex gap-2">
+              <Button size="sm" variant="ghost" onClick={signOut}>
+                Sign out
+              </Button>
+              <Button
+                size="sm"
+                onClick={() => {
+                  resetDemo()
+                  setAboutOpen(false)
+                }}
+              >
+                Reset demo data
+              </Button>
+            </div>
           </div>
         </Dialog.Content>
       </Dialog.Portal>

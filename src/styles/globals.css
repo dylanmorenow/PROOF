@@ -171,3 +171,30 @@ html.lens [data-lens] { box-shadow: var(--shadow-card), 0 0 0 2px rgb(18 124 145
 @media (max-width: 639px) {
   html[data-tour='on'] #main { padding-bottom: 60vh; }
 }
+
+/* Sign-in page motion */
+@keyframes blob-drift {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(6vmax, 4vmax) scale(1.08); }
+  66% { transform: translate(-4vmax, 6vmax) scale(.94); }
+}
+.landing-blob { animation: blob-drift 22s ease-in-out infinite; }
+
+@keyframes sheen { to { background-position: -200% 0; } }
+
+@keyframes caret-blink { 50% { opacity: 0; } }
+.caret { display: inline-block; width: 2px; height: 18px; margin-left: 1px; background: var(--color-teal); animation: caret-blink 1s steps(1) infinite; }
+
+@keyframes shine-sweep {
+  0%, 60% { transform: translateX(-120%); }
+  100% { transform: translateX(120%); }
+}
+.landing-shine { background: linear-gradient(100deg, transparent 30%, rgb(255 255 255 / .28) 50%, transparent 70%); animation: shine-sweep 3.6s ease-in-out infinite; }
+
+@keyframes link-flow { to { stroke-dashoffset: -20; } }
+
+@keyframes title-rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+#main h1 { animation: title-rise .6s var(--ease-out-expo) both; }
+
+/* The tour blur re-renders whatever moves behind it, so ambient motion rests during a tour */
+html[data-tour='on'] .landing-blob { animation-play-state: paused; }

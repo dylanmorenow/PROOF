@@ -5,10 +5,18 @@ About 5 minutes. Live at **https://dylanmorenow.github.io/PROOF/**
 ## Before you present
 
 - Open the link in Chrome or Edge on a 1920 × 1080 screen, full screen with F11.
-- Click **About** in the sidebar, then **Reset demo data**, so every number starts clean.
+- Click **About** in the sidebar, then **Reset demo data**, so every number starts clean. Then click **Sign out** in the same dialog so you open on the sign-in screen.
 - If the "New here?" bubble appears, dismiss it. You will start the tour yourself.
 - Keys worth knowing. **L** toggles the Strategy lens. **[** collapses the sidebar. **Esc** exits a tour. **← →** move through a tour.
 - Every company, person and figure is fictional. Say so once at the start.
+
+## 0. Sign in (20 s)
+
+**Show** the sign-in screen. Let the globe settle while the demo account types itself in.
+
+**Say** "Every PT Energy customer gets their own PROOF Room. Here is Mahakam Delta Processing signing in."
+
+**Do** click **Sign in**. The camera dives into Indonesia and the workspace opens. No password is checked, it is a prototype.
 
 ## 1. The command center (60 s)
 

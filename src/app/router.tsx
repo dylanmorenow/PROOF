@@ -1,14 +1,14 @@
 import { createBrowserRouter } from 'react-router'
 import { OverviewPage } from '@/features/overview/OverviewPage'
 import { NotFoundPage } from '@/pages/PlaceholderPage'
-import { AppShell } from './AppShell'
+import { Gate } from './Gate'
 
 // The Overview ships in the main bundle; other pages load on first visit.
 // BASE_URL is '/PROOF/' on GitHub Pages and '/' locally.
 export const router = createBrowserRouter(
   [
     {
-      element: <AppShell />,
+      element: <Gate />,
       children: [
         { index: true, element: <OverviewPage /> },
         { path: 'operations', lazy: async () => ({ Component: (await import('@/features/operations/OperationsPage')).OperationsPage }) },

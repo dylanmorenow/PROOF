@@ -6,6 +6,7 @@ import type { ServiceException, WorkOrder } from '@/data/types'
 import { cx } from '@/lib/cx'
 import { fmtRelative } from '@/lib/format'
 import { Card } from '@/ui/Card'
+import { Grow } from '@/ui/Grow'
 import type { OverviewData } from './useOverview'
 
 /* ───────────── Needs attention ───────────── */
@@ -91,7 +92,7 @@ export function ProofFunnel({ funnel }: { funnel: Funnel }) {
             <li key={s.key} className="grid grid-cols-[120px_1fr_44px] items-center gap-3">
               <span className="text-[14px] font-medium text-text-1">{s.label}</span>
               <span className="h-2 overflow-hidden rounded-full bg-bg-1">
-                <span className="block h-full rounded-full transition-[width] duration-700" style={{ width: `${(v / max) * 100}%`, background: s.color }} />
+                <Grow pct={(v / max) * 100} color={s.color} delay={0.3 + STAGES.indexOf(s) * 0.1} />
               </span>
               <span className="text-right text-[15px] font-semibold text-text-1 tabular">{v}</span>
             </li>

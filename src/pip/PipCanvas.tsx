@@ -55,7 +55,7 @@ function Halo({ progress, mood }: { progress: number; mood: PipMood }) {
   )
 }
 
-function Crystal() {
+export function Crystal() {
   const { mood, progress, gaze } = usePip()
   const root = useRef<THREE.Group>(null)
   const body = useRef<THREE.Group>(null)

@@ -25,6 +25,8 @@ import { fmtDate, fmtPct } from '@/lib/format'
 import { Button } from '@/ui/Button'
 import { Card } from '@/ui/Card'
 import { Delta } from '@/ui/Delta'
+import { Grow } from '@/ui/Grow'
+import { CountUp } from '@/motion/useCountUp'
 
 export function PerformancePage() {
   const dataset = useApp((s) => s.dataset)
@@ -77,7 +79,7 @@ export function PerformancePage() {
           <div key={k.label} className="surface-card p-5">
             <div className="eyebrow">{k.label}</div>
             <div className="mt-2 flex items-baseline gap-3">
-              <span className="type-display text-[32px] leading-none tabular">{fmtPct(k.now.pct)}</span>
+              <span className="type-display text-[32px] leading-none tabular">{k.now.pct == null ? 'n/a' : <CountUp value={k.now.pct} format={(n) => `${n.toFixed(1)}%`} />}</span>
               <Delta value={k.delta} />
             </div>
             {k.before && <div className="mt-2 text-[13px] text-text-2 tabular">{fmtPct(k.before.pct)} previous period</div>}
@@ -146,7 +148,7 @@ export function PerformancePage() {
                 <li key={cat} className="grid grid-cols-[150px_1fr_28px] items-center gap-3 text-[14px]">
                   <span>{cat}</span>
                   <span className="h-2 overflow-hidden rounded-full bg-bg-1">
-                    <span className="block h-full rounded-full bg-amber/80" style={{ width: `${(n / maxCat) * 100}%` }} />
+                    <Grow pct={(n / maxCat) * 100} className="block h-full rounded-full bg-amber/80" />
                   </span>
                   <span className="text-right font-semibold tabular">{n}</span>
                 </li>
@@ -225,7 +227,7 @@ function Bar({ pct, color = 'bg-teal' }: { pct: number | null; color?: string })
   return (
     <span className="flex items-center gap-3">
       <span className="h-1.5 w-24 overflow-hidden rounded-full bg-bg-1">
-        <span className={`block h-full rounded-full ${color}`} style={{ width: `${pct ?? 0}%` }} />
+        <Grow pct={pct ?? 0} className={`block h-full rounded-full ${color}`} />
       </span>
       <span className="tabular">{fmtPct(pct)}</span>
     </span>

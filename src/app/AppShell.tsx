@@ -55,6 +55,10 @@ export function AppShell() {
         <a href="#main" className="sr-only z-50 rounded bg-surface-2 px-3 py-2 focus:not-sr-only focus:fixed focus:top-3 focus:left-3">
           Skip to content
         </a>
+        <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
+          <div className="landing-blob absolute -top-[30%] right-[-10%] size-[60vmax] rounded-full bg-[radial-gradient(circle,rgb(118_207_218/.16),transparent_60%)]" />
+          <div className="landing-blob absolute bottom-[-35%] left-[10%] size-[55vmax] rounded-full bg-[radial-gradient(circle,rgb(18_124_145/.08),transparent_60%)] [animation-delay:-11s]" />
+        </div>
         <Sidebar />
         <div className="relative z-10 min-h-dvh transition-[padding] duration-300 ease-[var(--ease-out-expo)] md:pl-[var(--content-offset)]" style={{ ['--content-offset' as string]: collapsed ? '72px' : '232px' }}>
           <Header />

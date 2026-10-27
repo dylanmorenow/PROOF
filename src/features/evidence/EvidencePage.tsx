@@ -60,8 +60,8 @@ export function EvidencePage() {
             <p className="py-16 text-center text-[14px] text-text-2">Nothing here</p>
           ) : (
             <ul>
-              {list.slice(0, limit).map((e) => (
-                <li key={e.id}>
+              {list.slice(0, limit).map((e, i) => (
+                <motion.li key={e.id} initial={{ opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.3, delay: Math.min(i % 15, 14) * 0.03 }}>
                   <button
                     onClick={() => setParams({ id: e.id })}
                     aria-pressed={e.id === selectedId}
@@ -76,7 +76,7 @@ export function EvidencePage() {
                     </span>
                     <ProofChain stage={e.stage} />
                   </button>
-                </li>
+                </motion.li>
               ))}
             </ul>
           )}

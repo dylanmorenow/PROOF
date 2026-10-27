@@ -9,6 +9,7 @@ import { cx } from '@/lib/cx'
 import { fmtDate } from '@/lib/format'
 import { Button } from '@/ui/Button'
 import { Card } from '@/ui/Card'
+import { Grow } from '@/ui/Grow'
 import { Milestones } from '@/ui/Milestones'
 import { ProofSummary } from '@/ui/ProofChain'
 import { SegmentedControl } from '@/ui/SegmentedControl'
@@ -88,12 +89,15 @@ export function OperationsPage() {
               </tr>
             </thead>
             <tbody>
-              {rows.map((w) => {
+              {rows.map((w, i) => {
                 const proof = workOrderProof(evidence.get(w.id) ?? [])
                 const isSel = w.id === selectedId
                 return (
-                  <tr
+                  <motion.tr
                     key={w.id}
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.35, delay: Math.min(i, 14) * 0.025 }}
                     tabIndex={0}
                     aria-selected={isSel}
                     onClick={() => (window.matchMedia('(min-width: 1280px)').matches ? setParam('wo', isSel ? null : w.id) : navigate(`/operations/${w.id}`))}
@@ -107,7 +111,7 @@ export function OperationsPage() {
                         <PriorityTag priority={w.priority} />
                         {w.id}
                         <span className="h-1 w-12 overflow-hidden rounded-full bg-black/10">
-                          <span className="block h-full bg-teal" style={{ width: `${progressOf(w) * 100}%` }} />
+                          <Grow pct={progressOf(w) * 100} className="block h-full bg-teal" delay={0.2 + Math.min(i, 14) * 0.025} />
                         </span>
                       </div>
                     </td>
@@ -119,7 +123,7 @@ export function OperationsPage() {
                     <td className="px-4">
                       <StatusPill status={w.status} short />
                     </td>
-                  </tr>
+                  </motion.tr>
                 )
               })}
             </tbody>

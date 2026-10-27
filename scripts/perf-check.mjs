@@ -3,6 +3,7 @@ const gpu = process.argv[2] === 'gpu'
 const url = process.argv[3] ?? 'http://localhost:5173/'
 const browser = await chromium.launch({ args: gpu ? ['--use-angle=d3d11', '--enable-gpu', '--ignore-gpu-blocklist', '--enable-gpu-rasterization'] : [] })
 const page = await browser.newPage({ viewport: { width: 1440, height: 900 } })
+await page.addInitScript(() => sessionStorage.setItem('proof-signed-in', '1'))
 await page.goto(url, { waitUntil: 'networkidle' })
 await page.waitForTimeout(2500)
 const fps = () => page.evaluate(() => new Promise((r) => { let n = 0; const t0 = performance.now(); const f = () => { n++; performance.now() - t0 < 1000 ? requestAnimationFrame(f) : r(n) }; requestAnimationFrame(f) }))

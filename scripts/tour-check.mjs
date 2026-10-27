@@ -12,6 +12,7 @@ const page = await browser.newPage({ viewport: { width: +w, height: +h } })
 const errors = []
 page.on('console', (m) => m.type() === 'error' && errors.push(m.text()))
 page.on('pageerror', (e) => errors.push(String(e)))
+await page.addInitScript(() => sessionStorage.setItem('proof-signed-in', '1'))
 await page.goto(base, { waitUntil: 'networkidle' })
 await page.waitForTimeout(1500)
 if (scroll) await page.evaluate((y) => window.scrollTo(0, y), +scroll)

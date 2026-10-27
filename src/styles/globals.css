@@ -159,3 +159,15 @@ html.lens [data-lens] { box-shadow: var(--shadow-card), 0 0 0 2px rgb(18 124 145
   box-shadow: 0 0 0 2px var(--color-sky), 0 0 0 6px rgb(118 207 218 / 0.25);
   transition: opacity 0.3s;
 }
+
+/* Print only the report sheet */
+@media print {
+  body * { visibility: hidden; }
+  .print-area, .print-area * { visibility: visible; }
+  .print-area { position: absolute; inset: 0 auto auto 0; width: 100%; }
+}
+
+/* Phones: give the page room to scroll targets above the tour's bottom sheet */
+@media (max-width: 639px) {
+  html[data-tour='on'] #main { padding-bottom: 60vh; }
+}

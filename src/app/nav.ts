@@ -17,7 +17,3 @@ export const NAV: NavItem[] = [
   { to: '/outcome-ledger', label: 'Outcome Ledger', icon: Scale, tour: 'nav.ledger', group: 'innovation' },
 ]
 
-export function pageTitle(pathname: string): string {
-  if (pathname.startsWith('/operations/')) return 'Service detail'
-  return NAV.find((n) => n.to === pathname)?.label ?? 'Not found'
-}

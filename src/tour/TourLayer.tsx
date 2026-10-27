@@ -104,7 +104,7 @@ function TourOverlay({ tour }: { tour: TourDef }) {
 
     const run = async () => {
       let navigated = false
-      if (step.route && location.pathname !== step.route) {
+      if (step.route && location.pathname + location.search !== step.route) {
         applyBox(null, 'spring')
         navigate(step.route)
         navigated = true

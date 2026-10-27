@@ -8,7 +8,6 @@ import { activeWorkOrders, PERIODS } from '@/data/selectors'
 import type { AccountScope } from '@/data/types'
 import { cx } from '@/lib/cx'
 import { SegmentedControl } from '@/ui/SegmentedControl'
-import { pageTitle } from './nav'
 
 function AccountMonogram({ label, all }: { label: string; all?: boolean }) {
   return (
@@ -104,7 +103,6 @@ function PrototypeChip() {
 export function Header() {
   const { pathname } = useLocation()
   const { period, setPeriod, setMobileNav } = useApp()
-  const title = pageTitle(pathname)
   const isDetail = pathname.startsWith('/operations/')
   return (
     <header className="sticky top-0 z-20 border-b border-line bg-[rgb(245_246_248/.72)] backdrop-blur-xl backdrop-saturate-150">
@@ -112,19 +110,17 @@ export function Header() {
         <button onClick={() => setMobileNav(true)} className="grid size-9 place-items-center rounded-md text-text-2 hover:text-text-1 md:hidden" aria-label="Open navigation">
           <Menu className="size-5" />
         </button>
-        <nav aria-label="Breadcrumb" className="flex min-w-0 items-center gap-1.5 text-[14px]">
-          {isDetail && (
-            <>
-              <Link to="/operations" className="text-text-2 hover:text-text-1">
-                Operations
-              </Link>
-              <ChevronRight className="size-3.5 text-text-3" />
-            </>
-          )}
-          <span className="truncate font-semibold text-text-1" aria-current="page">
-            {isDetail ? pathname.split('/')[2] : title}
-          </span>
-        </nav>
+        {isDetail && (
+          <nav aria-label="Breadcrumb" className="flex min-w-0 items-center gap-1.5 text-[14px]">
+            <Link to="/operations" className="text-text-2 hover:text-text-1">
+              Operations
+            </Link>
+            <ChevronRight className="size-3.5 text-text-3" />
+            <span className="truncate font-semibold text-text-1" aria-current="page">
+              {pathname.split('/')[2]}
+            </span>
+          </nav>
+        )}
         <div className="ml-auto flex items-center gap-2 md:gap-3">
           <PrototypeChip />
           <SegmentedControl

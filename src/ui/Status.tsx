@@ -3,14 +3,14 @@ import { cx } from '@/lib/cx'
 
 export type Tone = 'neutral' | 'info' | 'attention' | 'critical' | 'verified' | 'muted'
 
-export const STATUS_META: Record<WorkOrderStatus, { label: string; tone: Tone }> = {
-  mobilizing: { label: 'Mobilizing', tone: 'neutral' },
-  'in-progress': { label: 'In progress', tone: 'info' },
-  'awaiting-evidence': { label: 'Awaiting evidence', tone: 'attention' },
-  'pending-ack': { label: 'Pending acknowledgment', tone: 'attention' },
-  'on-hold': { label: 'On hold', tone: 'critical' },
-  scheduled: { label: 'Scheduled', tone: 'muted' },
-  completed: { label: 'Completed', tone: 'verified' },
+export const STATUS_META: Record<WorkOrderStatus, { label: string; short: string; tone: Tone }> = {
+  mobilizing: { label: 'Mobilizing', short: 'Mobilizing', tone: 'neutral' },
+  'in-progress': { label: 'In progress', short: 'In progress', tone: 'info' },
+  'awaiting-evidence': { label: 'Awaiting evidence', short: 'Evidence due', tone: 'attention' },
+  'pending-ack': { label: 'Pending acknowledgment', short: 'Sign-off', tone: 'attention' },
+  'on-hold': { label: 'On hold', short: 'On hold', tone: 'critical' },
+  scheduled: { label: 'Scheduled', short: 'Scheduled', tone: 'muted' },
+  completed: { label: 'Completed', short: 'Completed', tone: 'verified' },
 }
 
 export const ACTIVE_STATUS_ORDER: ActiveStatus[] = ['mobilizing', 'in-progress', 'awaiting-evidence', 'pending-ack', 'on-hold']
@@ -42,12 +42,12 @@ export function StatusDot({ tone, pulse }: { tone: Tone; pulse?: boolean }) {
   )
 }
 
-export function StatusPill({ status, className }: { status: WorkOrderStatus; className?: string }) {
+export function StatusPill({ status, short, className }: { status: WorkOrderStatus; short?: boolean; className?: string }) {
   const meta = STATUS_META[status]
   return (
     <span className={cx('inline-flex items-center gap-1.5 whitespace-nowrap text-[12.5px] font-medium', toneText[meta.tone], className)}>
       <StatusDot tone={meta.tone} />
-      {meta.label}
+      {short ? meta.short : meta.label}
     </span>
   )
 }

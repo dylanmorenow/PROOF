@@ -8,7 +8,6 @@ import type {
   ISODate,
   OutcomeContract,
   PeriodId,
-  ProofStage,
   RegionId,
   ServiceException,
   WorkOrder,
@@ -145,17 +144,6 @@ export function monthlySeries(months: string[], fn: (w: Window) => Ratio): Serie
   return months.map((month) => ({ month, value: fn(monthWindow(month)).pct }))
 }
 
-export function activeCountAt(orders: WorkOrder[], day: ISODate): number {
-  return orders.filter((wo) => {
-    if (wo.status === 'scheduled' || wo.start > day) return false
-    return !wo.completedOn || wo.completedOn > day
-  }).length
-}
-
-export function openExceptionsAt(exceptions: ServiceException[], day: ISODate): number {
-  return exceptions.filter((x) => x.raisedOn <= day && (!x.resolvedOn || x.resolvedOn > day)).length
-}
-
 export function trendMonths(period: PeriodId): string[] {
   return lastMonths(period === '30d' ? 6 : period === '90d' ? 9 : 12)
 }
@@ -180,26 +168,6 @@ export function proofFunnel(records: EvidenceRecord[], w: Window): ProofFunnel {
     recapture: inP.filter((e) => e.stage === 'recapture').length,
   }
 }
-
-/** Verification throughput for the period: queue, median turnaround and re-capture rate. */
-export function verificationStats(records: EvidenceRecord[], w: Window) {
-  const uploaded = records.filter((e) => e.versions[0] && inWindow(dayOf(e.versions[0].uploadedAt), w))
-  const hours = uploaded
-    .map((e) => {
-      const ok = e.versions.find((v) => v.outcome === 'verified' && v.reviewedAt)
-      return ok ? (Date.parse(ok.reviewedAt!) - Date.parse(e.versions[0].uploadedAt)) / HOUR : null
-    })
-    .filter((h): h is number => h != null)
-    .sort((a, b) => a - b)
-  const median = hours.length ? (hours.length % 2 ? hours[(hours.length - 1) / 2] : (hours[hours.length / 2 - 1] + hours[hours.length / 2]) / 2) : null
-  return {
-    awaiting: records.filter((e) => e.stage === 'submitted').length,
-    medianHours: median,
-    recaptureRate: uploaded.length ? (uploaded.filter((e) => e.versions.some((v) => v.outcome === 'rejected')).length / uploaded.length) * 100 : null,
-  }
-}
-
-export const STAGE_ORDER: Record<ProofStage, number> = { captured: 1, submitted: 2, recapture: 2, verified: 3, acknowledged: 4 }
 
 /** Proof Chain summary for a work order: how far its weakest record has progressed. */
 export function workOrderProof(records: EvidenceRecord[]) {
@@ -226,10 +194,6 @@ export function evidenceByWorkOrder(ds: Dataset): Map<string, EvidenceRecord[]> 
 
 export function progressOf(wo: WorkOrder): number {
   return wo.milestones.filter((m) => m.state === 'done').length / wo.milestones.length
-}
-
-export function currentMilestone(wo: WorkOrder) {
-  return wo.milestones.find((m) => m.state === 'current' || m.state === 'blocked')
 }
 
 /* ───────────── regions ───────────── */
@@ -270,51 +234,6 @@ export function regionSummaries(ds: Dataset, account: AccountScope, period: Peri
       byStatus,
     }
   })
-}
-
-/* ───────────── activity feed ───────────── */
-
-export type ActivityKind = 'milestone' | 'uploaded' | 'verified' | 'acknowledged' | 'rejected' | 'exception' | 'resolved'
-
-export interface ActivityEvent {
-  id: string
-  at: string
-  kind: ActivityKind
-  workOrderId?: string
-  title: string
-  detail: string
-}
-
-export function activityFeed(ds: Dataset, account: AccountScope, limit = 12): ActivityEvent[] {
-  const orders = scopeWorkOrders(ds, account)
-  const records = scopeEvidence(ds, account)
-  const exceptions = scopeExceptions(ds, account)
-  const nowMs = Date.parse(DEMO_NOW)
-  const since = addDays(DEMO_TODAY, -21)
-  const out: ActivityEvent[] = []
-  for (const wo of orders) {
-    for (const m of wo.milestones) {
-      if (!m.actual || m.actual < since) continue
-      out.push({ id: `${m.id}-done`, at: `${m.actual}T17:00:00+07:00`, kind: 'milestone', workOrderId: wo.id, title: `${m.name} completed`, detail: wo.title })
-    }
-  }
-  for (const e of records) {
-    if (e.uploadedAt && dayOf(e.uploadedAt) >= since) out.push({ id: `${e.id}-up`, at: e.uploadedAt, kind: 'uploaded', workOrderId: e.workOrderId, title: `${e.id} submitted`, detail: e.title })
-    for (const v of e.versions) {
-      if (v.outcome === 'rejected' && v.reviewedAt && dayOf(v.reviewedAt) >= since)
-        out.push({ id: `${e.id}-rej-${v.version}`, at: v.reviewedAt, kind: 'rejected', workOrderId: e.workOrderId, title: `${e.id} v${v.version} returned for re-capture`, detail: v.note })
-    }
-    if (e.verifiedAt && dayOf(e.verifiedAt) >= since) out.push({ id: `${e.id}-ver`, at: e.verifiedAt, kind: 'verified', workOrderId: e.workOrderId, title: `${e.id} verified`, detail: e.title })
-    if (e.acknowledgedAt && dayOf(e.acknowledgedAt) >= since) out.push({ id: `${e.id}-ack`, at: e.acknowledgedAt, kind: 'acknowledged', workOrderId: e.workOrderId, title: `${e.id} acknowledged by customer`, detail: e.title })
-  }
-  for (const x of exceptions) {
-    if (x.raisedOn >= since) out.push({ id: `${x.id}-raised`, at: `${x.raisedOn}T10:00:00+07:00`, kind: 'exception', workOrderId: x.workOrderId, title: `${x.id} raised · ${x.category}`, detail: x.title })
-    if (x.resolvedOn && x.resolvedOn >= since) out.push({ id: `${x.id}-res`, at: `${x.resolvedOn}T16:00:00+07:00`, kind: 'resolved', workOrderId: x.workOrderId, title: `${x.id} resolved`, detail: x.title })
-  }
-  return out
-    .filter((e) => Date.parse(e.at) <= nowMs)
-    .sort((a, b) => Date.parse(b.at) - Date.parse(a.at))
-    .slice(0, limit)
 }
 
 /* ───────────── outcome ledger ───────────── */

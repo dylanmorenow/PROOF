@@ -128,7 +128,7 @@ export function LandingPage() {
         </div>
 
         {/* Live figures from the same dataset as the app */}
-        <motion.dl className="mt-8 hidden gap-10 md:absolute md:bottom-10 md:left-[7vw] md:mt-0 md:flex" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1, duration: 0.8 }}>
+        <motion.dl className="mt-10 hidden gap-10 md:flex [@media(max-height:760px)]:hidden" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1, duration: 0.8 }}>
           {stats.map((s, i) => (
             <div key={s.label}>
               <dd className="type-display text-[28px] tabular">

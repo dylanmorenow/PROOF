@@ -1,7 +1,6 @@
 import { ArrowRight, Clock, X } from 'lucide-react'
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
 import { lazy, Suspense, useEffect, useRef, useState } from 'react'
-import { useApp } from '@/app/store'
 import { useTour } from '@/tour/tourStore'
 import { TOURS } from '@/tour/tours'
 import { cx } from '@/lib/cx'
@@ -13,7 +12,7 @@ const PipCanvas = lazy(() => import('./PipCanvas'))
 
 /** Canvas box in CSS px; PIP is scaled from this to its dock or card-slot size. */
 const BOX = 120
-const DOCK = 92
+const DOCK = 80
 const DOCK_MARGIN = 20
 
 function useViewport() {
@@ -41,7 +40,6 @@ export function PipLayer() {
   const touring = useTour((s) => !!s.tour)
   const startTour = useTour((s) => s.start)
   const reduce = useReducedMotion()
-  const collapsed = useApp((s) => s.sidebarCollapsed)
   const vp = useViewport()
   const [use3D] = useState(canRender3D)
   const [ready3D, setReady3D] = useState(false)
@@ -90,15 +88,11 @@ export function PipLayer() {
     }
   }, [pickerOpen, setPickerOpen])
 
-  // Tablet and desktop: PIP lives in the sidebar's empty space above its footer, so it never covers content.
-  // Phones have no sidebar, so it floats bottom-right.
-  const inSidebar = vp.w >= 768
-  const dockSize = !inSidebar ? 60 : collapsed ? 56 : DOCK
-  const dock = inSidebar
-    ? { x: (collapsed ? 72 : 232) / 2, y: vp.h - 150 - dockSize / 2, size: dockSize }
-    : { x: vp.w - DOCK_MARGIN - dockSize / 2, y: vp.h - DOCK_MARGIN - dockSize / 2, size: dockSize }
-  const dockTop = dock.y - dockSize / 2
-  const at = anchor ?? dock
+  const dockSize = vp.w < 640 ? 60 : DOCK
+  const dock = { x: vp.w - DOCK_MARGIN - dockSize / 2, y: vp.h - DOCK_MARGIN - dockSize / 2, size: dockSize }
+  // The anchor only counts during a tour: the closing overlay can write one late, which used to strand PIP mid-screen.
+  const docked = !touring || !anchor
+  const at = docked ? dock : anchor
   const scale = at.size / BOX
 
   return (
@@ -106,8 +100,8 @@ export function PipLayer() {
       {/* Dock pedestal stays put while PIP travels */}
       <div
         aria-hidden="true"
-        className={cx('pointer-events-none fixed z-[44] rounded-full transition-opacity duration-500', anchor ? 'opacity-0' : 'opacity-100')}
-        style={{ width: dockSize, height: dockSize, left: dock.x - dockSize / 2, top: dockTop }}
+        className={cx('pointer-events-none fixed z-[44] rounded-full transition-opacity duration-500', !docked ? 'opacity-0' : 'opacity-100')}
+        style={{ width: dockSize, height: dockSize, right: DOCK_MARGIN, bottom: DOCK_MARGIN }}
       >
         <div className="absolute inset-0 rounded-full border border-white/70 bg-white/70 shadow-[var(--shadow-raised)] backdrop-blur-xl" />
       </div>
@@ -160,7 +154,7 @@ export function PipLayer() {
               startTour('welcome')
             }}
             className="fixed z-[94] flex items-center gap-2 rounded-full border border-line bg-white/90 backdrop-blur-xl py-2 pr-2 pl-4 text-[13px] font-medium text-text-1 shadow-[var(--shadow-raised)] hover:bg-white"
-            style={inSidebar ? { left: dock.x + dockSize / 2 + 12, top: dock.y - 19 } : { right: DOCK_MARGIN + dockSize + 12, bottom: DOCK_MARGIN + dockSize / 2 - 19 }}
+            style={{ right: DOCK_MARGIN + dockSize + 12, bottom: DOCK_MARGIN + dockSize / 2 - 19 }}
           >
             New here? Take a quick tour
             <span className="grid size-6 place-items-center rounded-full bg-teal text-white">
@@ -193,8 +187,8 @@ export function PipLayer() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 6, scale: 0.98, transition: { duration: 0.12 } }}
             transition={spring.smooth}
-            className={cx('fixed z-[96] w-[320px] rounded-[18px] border border-line bg-white/90 p-2 shadow-[var(--shadow-raised)] backdrop-blur-xl', inSidebar ? 'origin-bottom-left' : 'origin-bottom-right')}
-            style={inSidebar ? { left: 12, bottom: vp.h - dockTop + 12 } : { right: DOCK_MARGIN, bottom: DOCK_MARGIN + dockSize + 12 }}
+            className="fixed z-[96] w-[320px] origin-bottom-right rounded-[18px] border border-line bg-white/90 p-2 shadow-[var(--shadow-raised)] backdrop-blur-xl"
+            style={{ right: DOCK_MARGIN, bottom: DOCK_MARGIN + dockSize + 12 }}
             onPointerDown={(e) => e.stopPropagation()}
           >
             <div className="px-3 pt-2.5 pb-2">

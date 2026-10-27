@@ -72,6 +72,21 @@ function TourOverlay({ tour }: { tour: TourDef }) {
     vw.set(vp.w)
     vh.set(vp.h)
   }, [vp, vw, vh])
+  // Guide line start: PIP's slot in the card, springing along with it.
+  const ax = useSpring(cx0, sp)
+  const ay = useSpring(cy0, sp)
+  const guide = useTransform([ax, ay, hx, hy, hw, hh], ([x, y, bx, by, bw, bh]: number[]) => {
+    // Aim at the nearest point on the spotlight's edge, bending through an elbow so it reads as pointing.
+    const tx = Math.min(Math.max(x, bx), bx + bw)
+    const ty = Math.min(Math.max(y, by), by + bh)
+    return `M${x} ${y} Q${tx} ${y} ${tx} ${ty}`
+  })
+  const guideEnd = useTransform([ax, ay, hx, hy, hw, hh], ([x, y, bx, by, bw, bh]: number[]) => ({
+    x: Math.min(Math.max(x, bx), bx + bw),
+    y: Math.min(Math.max(y, by), by + bh),
+  }))
+  const dotX = useTransform(guideEnd, (p) => p.x)
+  const dotY = useTransform(guideEnd, (p) => p.y)
   const clip = useTransform([hx, hy, hw, hh, hr, vw, vh], ([x, y, w, h, r, W, H]: number[]) => `path(evenodd, "${holePath(W, H, { x, y, w, h, r })}")`)
 
   const applyBox = useCallback(
@@ -231,7 +246,11 @@ function TourOverlay({ tour }: { tour: TourDef }) {
   useEffect(() => {
     if (!cardPos || !slotRef.current) return
     const s = slotRef.current
-    usePip.getState().setAnchor({ x: cardPos.x + s.offsetLeft + SLOT / 2, y: cardPos.y + s.offsetTop + SLOT / 2, size: SLOT + 14 })
+    const x = cardPos.x + s.offsetLeft + SLOT / 2
+    const y = cardPos.y + s.offsetTop + SLOT / 2
+    usePip.getState().setAnchor({ x, y, size: SLOT + 14 })
+    ax.set(x)
+    ay.set(y)
   }, [cardPos])
   useEffect(() => {
     usePip.getState().setGaze(box ? { x: box.x + box.w / 2, y: box.y + box.h / 2 } : null)
@@ -313,6 +332,7 @@ function TourOverlay({ tour }: { tour: TourDef }) {
       />
       {blockHole && <motion.div className="absolute top-0 left-0" style={{ x: hx, y: hy, width: hw, height: hh }} />}
 
+
       <div className="sr-only" aria-live="polite">
         {step.intro ? step.title : `Step ${stepNo} of ${steps.length}, ${step.title}`}
       </div>
@@ -387,6 +407,11 @@ function TourOverlay({ tour }: { tour: TourDef }) {
           )}
         </div>
       </motion.div>
+      {/* Guide line, drawn above the card so it visibly leaves PIP and lands on the spotlight */}
+      <svg aria-hidden="true" className={cx('pointer-events-none absolute inset-0 h-full w-full transition-opacity duration-300', hasHole && !moving ? 'opacity-100' : 'opacity-0')}>
+        <motion.path d={guide} fill="none" stroke="#3FA9BB" strokeWidth="2.5" strokeLinecap="round" strokeDasharray="2 6" className="[animation:link-flow_1.2s_linear_infinite]" />
+        <motion.circle cx={dotX} cy={dotY} r="5" fill="#127C91" stroke="#fff" strokeWidth="2" />
+      </svg>
     </motion.div>
   )
 }

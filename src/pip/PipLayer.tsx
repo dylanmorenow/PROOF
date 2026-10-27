@@ -102,7 +102,7 @@ export function PipLayer() {
         className={cx('pointer-events-none fixed z-[44] rounded-full transition-opacity duration-500', anchor ? 'opacity-0' : 'opacity-100')}
         style={{ width: dockSize, height: dockSize, right: DOCK_MARGIN, bottom: DOCK_MARGIN }}
       >
-        <div className="absolute inset-0 rounded-full border border-[rgb(118_207_218/.18)] bg-[radial-gradient(circle_at_50%_60%,rgb(18_124_145/.32),rgb(8_21_34/.75)_68%)] shadow-[0_10px_30px_-8px_rgb(0_0_0/.6),0_0_0_1px_rgb(8_21_34/.8)] backdrop-blur-[2px]" />
+        <div className="absolute inset-0 rounded-full border border-white/70 bg-white/70 shadow-[var(--shadow-raised)] backdrop-blur-xl" />
       </div>
 
       <motion.div
@@ -152,11 +152,11 @@ export function PipLayer() {
               setNudge(false)
               startTour('welcome')
             }}
-            className="fixed z-[94] flex items-center gap-2 rounded-full border border-[rgb(118_207_218/.3)] bg-surface-2 py-2 pr-2 pl-4 text-[13px] font-medium text-text-1 shadow-[var(--shadow-raised)] hover:border-cyan/60"
+            className="fixed z-[94] flex items-center gap-2 rounded-full border border-line bg-white/90 backdrop-blur-xl py-2 pr-2 pl-4 text-[13px] font-medium text-text-1 shadow-[var(--shadow-raised)] hover:bg-white"
             style={{ right: DOCK_MARGIN + dockSize + 12, bottom: DOCK_MARGIN + dockSize / 2 - 19 }}
           >
             New here? Take the 90-second tour
-            <span className="grid size-6 place-items-center rounded-full bg-cyan text-bg-0">
+            <span className="grid size-6 place-items-center rounded-full bg-teal text-white">
               <ArrowRight className="size-3.5" />
             </span>
             <span
@@ -186,7 +186,7 @@ export function PipLayer() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 6, scale: 0.98, transition: { duration: 0.12 } }}
             transition={spring.smooth}
-            className="fixed z-[96] w-[320px] origin-bottom-right rounded-[14px] border border-line-strong bg-surface-2 p-2 shadow-[var(--shadow-raised)]"
+            className="fixed z-[96] w-[320px] origin-bottom-right rounded-[18px] border border-line bg-white/90 p-2 backdrop-blur-xl shadow-[var(--shadow-raised)]"
             style={{ right: DOCK_MARGIN, bottom: DOCK_MARGIN + dockSize + 12 }}
             onPointerDown={(e) => e.stopPropagation()}
           >
@@ -203,9 +203,9 @@ export function PipLayer() {
                   disabled={!available}
                   autoFocus={i === 0}
                   onClick={() => startTour(t.id)}
-                  className="group flex w-full items-center gap-3 rounded-[10px] px-3 py-2.5 text-left outline-none transition-colors hover:bg-[rgb(142_164_181/.1)] focus-visible:bg-[rgb(142_164_181/.1)] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-transparent"
+                  className="group flex w-full items-center gap-3 rounded-[10px] px-3 py-2.5 text-left outline-none transition-colors hover:bg-black/[.04] focus-visible:bg-black/[.04] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-transparent"
                 >
-                  <span className="grid size-8 shrink-0 place-items-center rounded-[8px] border border-line-strong bg-bg-1 font-mono text-[11px] font-semibold text-cyan">
+                  <span className="grid size-8 shrink-0 place-items-center rounded-full bg-teal-soft text-[12px] font-semibold text-cyan">
                     {String.fromCharCode(65 + i)}
                   </span>
                   <span className="min-w-0 flex-1">

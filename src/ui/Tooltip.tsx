@@ -10,7 +10,7 @@ export function Tooltip({ content, children, side = 'top' }: { content: React.Re
         <T.Content
           side={side}
           sideOffset={8}
-          className="z-[60] max-w-64 rounded-[8px] border border-line-strong bg-surface-3 px-2.5 py-1.5 text-[12px] leading-snug text-text-1 shadow-[var(--shadow-raised)] data-[state=delayed-open]:animate-[tip-in_.16s_var(--ease-out-expo)]"
+          className="z-[60] max-w-64 rounded-[10px] bg-text-1 px-2.5 py-1.5 text-[12px] leading-snug text-white shadow-[var(--shadow-raised)] data-[state=delayed-open]:animate-[tip-in_.16s_var(--ease-out-expo)]"
         >
           {content}
         </T.Content>

@@ -52,20 +52,19 @@ export function AppShell() {
   return (
     <MotionConfig reducedMotion="user">
       <TooltipProvider>
-        <div className="app-ambient" aria-hidden="true" />
         <a href="#main" className="sr-only z-50 rounded bg-surface-2 px-3 py-2 focus:not-sr-only focus:fixed focus:top-3 focus:left-3">
           Skip to content
         </a>
         <Sidebar />
-        <div className="relative z-10 min-h-dvh transition-[padding] duration-300 ease-[var(--ease-out-expo)] md:pl-[var(--content-offset)]" style={{ ['--content-offset' as string]: collapsed ? '72px' : '248px' }}>
+        <div className="relative z-10 min-h-dvh transition-[padding] duration-300 ease-[var(--ease-out-expo)] md:pl-[var(--content-offset)]" style={{ ['--content-offset' as string]: collapsed ? '72px' : '232px' }}>
           <Header />
           <main id="main" className="relative mx-auto max-w-[1600px] px-4 pt-6 pb-32 md:px-8 md:pt-8">
             <AnimatePresence mode="popLayout" initial={false}>
               <motion.div
                 key={location.pathname}
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0, transition: { duration: 0.28, ease: [0.22, 1, 0.36, 1] } }}
-                exit={{ opacity: 0, transition: { duration: 0.12 } }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1, transition: { duration: 0.2 } }}
+                exit={{ opacity: 0, transition: { duration: 0.1 } }}
               >
                 {outlet}
               </motion.div>

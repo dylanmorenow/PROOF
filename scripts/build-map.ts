@@ -1,7 +1,7 @@
 // Pre-projects Natural Earth geography (via world-atlas, 1:50m) into static SVG path data.
 // Run with `npm run map`; output is committed so the app ships no geo libraries.
 import { readFileSync, writeFileSync } from 'node:fs'
-import { geoMercator, geoPath, geoGraticule } from 'd3-geo'
+import { geoMercator, geoPath } from 'd3-geo'
 import { feature } from 'topojson-client'
 import type { Topology, GeometryCollection } from 'topojson-specification'
 import type { Feature, Geometry } from 'geojson'
@@ -40,18 +40,6 @@ const byId = (id: string) => countries.features.find((f) => String(f.id) === id)
 const indonesia = path(byId(INDONESIA)!)!
 const neighbours = NEIGHBOURS.map((id) => byId(id)).filter(Boolean).map((f) => path(f!)).filter(Boolean).join('')
 
-const graticule = geoGraticule().extent([[90, -15], [145, 10]]).step([5, 5])
-const graticulePath = path(graticule())!
-
-const lonTicks = [95, 100, 105, 110, 115, 120, 125, 130, 135, 140].map((lon) => ({
-  label: `${lon}°E`,
-  x: Math.round(projection([lon, 0])![0] * 10) / 10,
-}))
-const latTicks = [5, 0, -5, -10].map((lat) => ({
-  label: lat === 0 ? '0°' : `${Math.abs(lat)}°${lat > 0 ? 'N' : 'S'}`,
-  y: Math.round(projection([100, lat])![1] * 10) / 10,
-}))
-
 const nodes = NODES.map((n) => {
   const [x, y] = projection([n.lon, n.lat])!
   return { ...n, x: Math.round(x * 10) / 10, y: Math.round(y * 10) / 10 }
@@ -63,9 +51,6 @@ export const MAP_WIDTH = ${WIDTH}
 export const MAP_HEIGHT = ${HEIGHT}
 export const INDONESIA_PATH = ${JSON.stringify(indonesia)}
 export const NEIGHBOURS_PATH = ${JSON.stringify(neighbours)}
-export const GRATICULE_PATH = ${JSON.stringify(graticulePath)}
-export const LON_TICKS = ${JSON.stringify(lonTicks)}
-export const LAT_TICKS = ${JSON.stringify(latTicks)}
 export const NODE_POSITIONS = ${JSON.stringify(nodes, null, 2)} as const
 `
 writeFileSync('src/features/network-map/geo.generated.ts', out)

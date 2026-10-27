@@ -6,11 +6,11 @@ const STEPS = ['Captured', 'Submitted', 'Verified', 'Acknowledged'] as const
 const LEVEL: Record<ProofStage, number> = { captured: 1, submitted: 2, recapture: 2, verified: 3, acknowledged: 4 }
 
 export const STAGE_COLOR: Record<ProofStage, string> = {
-  captured: '#8EA4B5',
-  submitted: '#76CFDA',
-  recapture: '#E9A23B',
-  verified: '#4FBF8B',
-  acknowledged: '#4FBF8B',
+  captured: '#8794A1',
+  submitted: '#127C91',
+  recapture: '#C97A0A',
+  verified: '#1A8A55',
+  acknowledged: '#1A8A55',
 }
 
 export const STAGE_LABEL: Record<ProofStage, string> = {
@@ -41,7 +41,7 @@ export function ProofChain({ stage, showLabel = false, className }: { stage: Pro
         <path d={`M8 5h${Math.max(0, (n - 1) * 13)}`} stroke={color} strokeOpacity=".7" strokeWidth="1" />
         {[0, 1, 2, 3].map((i) => {
           const on = i < n
-          return <Pip key={i} x={i * 13} fill={on ? (i === n - 1 ? color : `${color}55`) : '#0B1B2C'} stroke={on ? color : 'rgb(142 164 181 / .35)'} />
+          return <Pip key={i} x={i * 13} fill={on ? (i === n - 1 ? color : `${color}55`) : '#ffffff'} stroke={on ? color : 'rgb(142 164 181 / .35)'} />
         })}
       </svg>
       {showLabel && <span className="whitespace-nowrap text-[12px] text-text-2">{label}</span>}

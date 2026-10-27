@@ -296,11 +296,11 @@ function TourOverlay({ tour }: { tour: TourDef }) {
       {!reduce && (
         <motion.div
           aria-hidden="true"
-          className={cx('absolute inset-0 backdrop-blur-[3px] backdrop-saturate-[.85] transition-opacity', moving ? 'opacity-0 duration-150' : 'opacity-100 duration-300')}
+          className={cx('absolute inset-0 backdrop-blur-[2px] transition-opacity', moving ? 'opacity-0 duration-150' : 'opacity-100 duration-300')}
           style={{ clipPath: clip, visibility: moving ? 'hidden' : 'visible', transitionProperty: 'opacity, visibility', transitionDelay: moving ? '0s, 150ms' : '0s' }}
         />
       )}
-      <motion.div aria-hidden="true" className="absolute inset-0 bg-[rgb(4_11_20/.66)]" style={{ clipPath: clip }} />
+      <motion.div aria-hidden="true" className="absolute inset-0 bg-[rgb(15_23_42/.3)]" style={{ clipPath: clip }} />
 
       {/* Spotlight ring */}
       <motion.div
@@ -322,7 +322,7 @@ function TourOverlay({ tour }: { tour: TourDef }) {
         aria-labelledby="tour-title"
         aria-describedby="tour-body"
         className={cx(
-          'fixed top-0 left-0 rounded-[16px] border border-[rgb(118_207_218/.22)] bg-[linear-gradient(180deg,#1a3652,#132c45)] shadow-[0_1px_0_rgb(255_255_255/.06)_inset,0_30px_80px_-20px_rgb(0_0_0/.75),0_0_0_1px_rgb(4_11_20/.6)]',
+          'fixed top-0 left-0 rounded-[20px] border border-white/60 bg-white/85 shadow-[0_24px_60px_-12px_rgb(15_23_42/.35)] backdrop-blur-2xl backdrop-saturate-150',
           isMobile && 'right-3',
         )}
         style={{ width: isMobile ? undefined : CARD_W }}
@@ -334,12 +334,12 @@ function TourOverlay({ tour }: { tour: TourDef }) {
           <div ref={slotRef} className="relative size-14 shrink-0" aria-hidden="true">
           </div>
           <div className="min-w-0 flex-1 pt-1">
-            <div className="eyebrow !text-cyan/90">{tour.title}</div>
+            <div className="text-[12.5px] font-medium text-cyan">{tour.title}</div>
             <div className="mt-0.5 text-[12px] text-text-2 tabular">
               Step {index + 1} of {tour.steps.length}
             </div>
           </div>
-          <button onClick={() => end()} className="-mt-1 -mr-2 grid size-8 place-items-center rounded-md text-text-2 transition-colors hover:bg-[rgb(142_164_181/.12)] hover:text-text-1" aria-label="Exit tour">
+          <button onClick={() => end()} className="-mt-1 -mr-2 grid size-8 place-items-center rounded-full text-text-2 transition-colors hover:bg-black/5 hover:text-text-1" aria-label="Exit tour">
             <X className="size-4" />
           </button>
         </div>
@@ -355,7 +355,7 @@ function TourOverlay({ tour }: { tour: TourDef }) {
               transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
               className="px-5 pt-3"
             >
-              <h2 id="tour-title" ref={titleRef} tabIndex={-1} className="type-display text-[19px] leading-snug font-[620] text-text-1 outline-none">
+              <h2 id="tour-title" ref={titleRef} tabIndex={-1} className="type-display text-[20px] leading-snug text-text-1 outline-none">
                 {phase === 'missing' ? 'This part isn’t on screen' : step.title}
               </h2>
               {phase === 'missing' ? (
@@ -363,12 +363,12 @@ function TourOverlay({ tour }: { tour: TourDef }) {
                   I couldn’t find “{step.title}” in the current layout — it may be hidden at this screen size. You can skip this step safely.
                 </p>
               ) : (
-                <dl id="tour-body" className="mt-3 grid grid-cols-[44px_1fr] gap-x-2 gap-y-2 text-[13.25px] leading-snug">
-                  <dt className="pt-px text-[10.5px] font-semibold tracking-[.08em] text-text-3 uppercase">What</dt>
+                <dl id="tour-body" className="mt-3 grid grid-cols-[40px_1fr] gap-x-2 gap-y-2.5 text-[14px] leading-snug">
+                  <dt className="pt-px text-[12px] font-medium text-text-3">What</dt>
                   <dd className="text-text-1">{step.what}</dd>
-                  <dt className="pt-px text-[10.5px] font-semibold tracking-[.08em] text-text-3 uppercase">Why</dt>
+                  <dt className="pt-px text-[12px] font-medium text-text-3">Why</dt>
                   <dd className="text-text-2">{step.why}</dd>
-                  <dt className="pt-px text-[10.5px] font-semibold tracking-[.08em] text-cyan/80 uppercase">Try</dt>
+                  <dt className="pt-px text-[12px] font-medium text-cyan">Try</dt>
                   <dd className="text-text-2">{step.action}</dd>
                 </dl>
               )}
@@ -378,7 +378,7 @@ function TourOverlay({ tour }: { tour: TourDef }) {
 
         <div className="mt-4 flex gap-1 px-5" aria-hidden="true">
           {tour.steps.map((s, i) => (
-            <span key={s.id} className="relative h-[3px] flex-1 overflow-hidden rounded-full bg-[rgb(142_164_181/.18)]">
+            <span key={s.id} className="relative h-[3px] flex-1 overflow-hidden rounded-full bg-black/[.07]">
               <motion.span className="absolute inset-0 origin-left rounded-full bg-cyan" initial={false} animate={{ scaleX: i <= index ? 1 : 0, opacity: i === index ? 1 : 0.55 }} transition={{ duration: 0.35 }} />
             </span>
           ))}

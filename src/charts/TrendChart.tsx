@@ -68,7 +68,7 @@ export function TrendChart({ series, target, height: fixedHeight, domain = [60, 
           ))}
           {target && (
             <g>
-              <line x1={M.left} x2={geo.w - M.right} y1={geo.y(target.value)} y2={geo.y(target.value)} stroke="#E9A23B" strokeOpacity=".55" strokeDasharray="3 4" />
+              <line x1={M.left} x2={geo.w - M.right} y1={geo.y(target.value)} y2={geo.y(target.value)} stroke="#C97A0A" strokeOpacity=".55" strokeDasharray="3 4" />
               <text x={M.left + 8} y={geo.y(target.value) - 6} textAnchor="start" className="fill-amber" fontSize="10.5" opacity=".85">
                 {target.label}
               </text>
@@ -90,7 +90,7 @@ export function TrendChart({ series, target, height: fixedHeight, domain = [60, 
                 transition={{ pathLength: { duration: 1.2, delay: 0.2 + i * 0.15, ease: [0.22, 1, 0.36, 1] }, d: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } }}
               />
               {hover != null && p.points[hover].value != null && (
-                <circle cx={geo.x(months[hover])} cy={geo.y(p.points[hover].value!)} r="4" fill={p.color} stroke="#10233a" strokeWidth="2" />
+                <circle cx={geo.x(months[hover])} cy={geo.y(p.points[hover].value!)} r="4" fill={p.color} stroke="#ffffff" strokeWidth="2" />
               )}
             </g>
           ))}
@@ -118,7 +118,7 @@ export function TrendChart({ series, target, height: fixedHeight, domain = [60, 
             animate={{ opacity: 1, y: 0, left: Math.min(Math.max(geo.x(months[hover])! - 90, 0), geo.w - 180) }}
             exit={{ opacity: 0 }}
             transition={{ type: 'spring', stiffness: 500, damping: 40 }}
-            className="pointer-events-none absolute top-0 w-[180px] rounded-[10px] border border-line-strong bg-[rgb(22_48_73/.96)] px-3 py-2.5 shadow-[var(--shadow-raised)]"
+            className="pointer-events-none absolute top-0 w-[180px] rounded-[10px] border border-line-strong bg-white/95 backdrop-blur-xl px-3 py-2.5 shadow-[var(--shadow-raised)]"
           >
             <div className="text-[11.5px] font-medium text-text-2">{fmtMonth(months[hover], true)}</div>
             {series.map((s) => (

@@ -105,7 +105,7 @@ export const WELCOME: TourDef = {
       id: 'next',
       route: '/',
       target: 'overview.attention',
-      placement: 'left-start',
+      placement: 'right-start',
       interactive: true,
       title: 'Start with a work order',
       what: 'These items are waiting on you: completed services to acknowledge, and exceptions that need a decision.',

@@ -36,10 +36,10 @@ export const Card = forwardRef<HTMLElement, CardProps>(function Card(
       {...rest}
     >
       {(title || actions) && (
-        <header className="flex min-h-12 items-center justify-between gap-3 px-5 pt-4 pb-2">
+        <header className="flex min-h-12 items-center justify-between gap-3 px-5 pt-5 pb-3">
           <div className="min-w-0">
             {eyebrow && <div className="eyebrow mb-0.5">{eyebrow}</div>}
-            {title && <h2 className="truncate text-[14px] font-semibold tracking-[-0.005em] text-text-1">{title}</h2>}
+            {title && <h2 className="truncate text-[17px] font-semibold tracking-[-0.015em] text-text-1">{title}</h2>}
           </div>
           {actions && <div className="flex shrink-0 items-center gap-2">{actions}</div>}
         </header>

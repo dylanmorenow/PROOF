@@ -8,7 +8,7 @@ export function Sparkline({
   values,
   width = 96,
   height = 28,
-  color = '#76CFDA',
+  color = '#127C91',
   delay = 0,
   domain,
 }: {
@@ -59,7 +59,7 @@ export function Sparkline({
           cy={last.y}
           r="2.5"
           fill={color}
-          stroke="#10233a"
+          stroke="#ffffff"
           strokeWidth="1.5"
           initial={reduce ? false : { scale: 0 }}
           animate={{ scale: 1 }}

@@ -28,7 +28,7 @@ const toneText: Record<Tone, string> = {
   neutral: 'text-text-1',
   info: 'text-text-1',
   attention: 'text-amber',
-  critical: 'text-[#f2777b]',
+  critical: 'text-critical',
   verified: 'text-verified',
   muted: 'text-text-2',
 }
@@ -58,7 +58,7 @@ export function PriorityTag({ priority }: { priority: Priority }) {
       className={cx(
         'inline-flex h-5 items-center rounded-[4px] border px-1.5 font-mono text-[10.5px] font-semibold tracking-wide',
         priority === 'P1'
-          ? 'border-[rgb(229_72_77/.4)] text-[#f2777b]'
+          ? 'border-[rgb(229_72_77/.4)] text-critical'
           : priority === 'P2'
             ? 'border-[rgb(233_162_59/.35)] text-amber'
             : 'border-line-strong text-text-2',

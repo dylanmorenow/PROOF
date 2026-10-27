@@ -2,8 +2,8 @@
 
 | To change | Edit | Notes |
 |---|---|---|
-| Colours, fonts, radii, shadows | `src/styles/globals.css` → `@theme` | Tailwind v4 tokens: `--color-cyan` becomes `text-cyan`, `bg-cyan`, … Keep cyan for accents and teal for fills (teal fails contrast for small text). |
-| Motion feel | `src/motion/tokens.ts` | Springs (`snappy`, `smooth`, `spotlight`), easing, entrance stagger. Reduced motion is respected globally via `MotionConfig`. |
+| Colours, fonts, radii, shadows | `src/styles/globals.css` → `@theme` | Light theme. Tailwind v4 tokens: `--color-cyan` (accent text/focus) becomes `text-cyan`, … `sky` is the bright brand cyan for fills only. Font: Apple system font (SF) with Inter as the fallback on Windows/Android. |
+| Motion feel | `src/motion/tokens.ts` | Critically damped springs (`bounce: 0`), easing, entrance stagger. Reduced motion is respected globally via `MotionConfig`. |
 | Navigation | `src/app/nav.ts` and `src/app/router.tsx` | Each nav item has a `tour` id so tours can point at it. |
 | Customers, regions, sites, vendors, crews, services | `src/data/reference.ts` | All fictional. Region coordinates for the map live in `scripts/build-map.ts`. |
 | Work orders, exceptions, contracts | `src/data/build.ts` | The 24 active orders, 7 open exceptions, hero order `WO-26-0417` and the three outcome contracts are authored here; history is generated from a fixed seed. Run `npm test` after any change — the invariants will tell you if pages stop reconciling. |

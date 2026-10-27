@@ -2,12 +2,12 @@ import { cx } from '@/lib/cx'
 import type { PipMood } from './pipStore'
 
 const CORE: Record<PipMood, string> = {
-  idle: '#76CFDA',
-  attentive: '#9be4ec',
-  guiding: '#9be4ec',
-  success: '#4FBF8B',
+  idle: '#127C91',
+  attentive: '#127C91',
+  guiding: '#127C91',
+  success: '#1A8A55',
   unavailable: '#8EA4B5',
-  celebrating: '#c9f3f7',
+  celebrating: '#3FA9BB',
 }
 
 /**
@@ -36,7 +36,7 @@ export function PipFallback({ mood, progress, size = 112 }: { mood: PipMood; pro
           <stop offset="1" stopColor="#127C91" stopOpacity=".25" />
         </linearGradient>
         <linearGradient id="pip2d-right" x1="1" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#76CFDA" stopOpacity=".28" />
+          <stop offset="0" stopColor="#127C91" stopOpacity=".28" />
           <stop offset="1" stopColor="#0b3a48" stopOpacity=".55" />
         </linearGradient>
       </defs>
@@ -46,7 +46,7 @@ export function PipFallback({ mood, progress, size = 112 }: { mood: PipMood; pro
           key={`b${i}`}
           d={arcPath(i, true)}
           fill="none"
-          stroke={i < lit ? core : '#76CFDA'}
+          stroke={i < lit ? core : '#127C91'}
           strokeOpacity={i < lit ? 0.9 : 0.28}
           strokeWidth="2"
           strokeLinecap="round"
@@ -55,18 +55,18 @@ export function PipFallback({ mood, progress, size = 112 }: { mood: PipMood; pro
       {/* crystal facets */}
       <path d="M60 14 80 42v36L60 106Z" fill="url(#pip2d-right)" />
       <path d="M60 14 40 42v36L60 106Z" fill="url(#pip2d-left)" />
-      <path d="M60 14 80 42v36L60 106 40 78V42Z" fill="none" stroke="#9be4ec" strokeOpacity=".75" strokeWidth="1.2" strokeLinejoin="round" />
-      <path d="M60 14v92M40 42l20 6 20-6M40 78l20-6 20 6" fill="none" stroke="#9be4ec" strokeOpacity=".3" strokeWidth=".9" />
+      <path d="M60 14 80 42v36L60 106 40 78V42Z" fill="none" stroke="#127C91" strokeOpacity=".75" strokeWidth="1.2" strokeLinejoin="round" />
+      <path d="M60 14v92M40 42l20 6 20-6M40 78l20-6 20 6" fill="none" stroke="#127C91" strokeOpacity=".3" strokeWidth=".9" />
       <circle cx="60" cy="60" r="22" fill="url(#pip2d-core)" opacity=".9" />
       <circle cx="60" cy="60" r="6" fill="#ffffff" />
-      <circle cx="63" cy="57.5" r="1.8" fill="#081522" opacity=".55" />
+      <circle cx="63" cy="57.5" r="1.8" fill="#ffffff" opacity=".55" />
       {/* halo — front half */}
       {[0, 1, 2, 3, 4].map((i) => (
         <path
           key={`f${i}`}
           d={arcPath(i, false)}
           fill="none"
-          stroke={i < lit ? core : '#76CFDA'}
+          stroke={i < lit ? core : '#127C91'}
           strokeOpacity={i < lit ? 1 : 0.55}
           strokeWidth="2.2"
           strokeLinecap="round"

@@ -5,9 +5,7 @@ PROOF Room's own code and design are all rights reserved. It uses the following 
 | Component | Licence |
 |---|---|
 | Natural Earth geography (via `world-atlas`) | Public domain (`world-atlas` packaging: ISC) |
-| Mona Sans (GitHub) | SIL Open Font License 1.1 |
 | Inter (Rasmus Andersson) | SIL Open Font License 1.1 |
-| JetBrains Mono | SIL Open Font License 1.1 |
 | React, React DOM, React Router | MIT |
 | Motion | MIT |
 | three.js, React Three Fiber, Drei | MIT |

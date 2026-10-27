@@ -6,10 +6,10 @@ import { useMemo, useRef } from 'react'
 import * as THREE from 'three'
 import { usePip, type PipMood } from './pipStore'
 
-const CYAN = new THREE.Color('#76CFDA')
+const CYAN = new THREE.Color('#3FA9BB')
 const GREEN = new THREE.Color('#4FBF8B')
 const STEEL = new THREE.Color('#8EA4B5')
-const WHITE = new THREE.Color('#e9fbfd')
+const WHITE = new THREE.Color('#0F6B7D')
 
 function crystalGeometry() {
   // Lathe a profile with 6 radial segments → hexagonal bipyramid with a short prism waist.
@@ -138,27 +138,23 @@ function Crystal() {
     <group ref={root}>
       <group ref={body}>
         <mesh geometry={geo}>
+          {/* Plain translucent glass: transmission would refract an empty (dark) canvas on a light page. */}
           <meshPhysicalMaterial
-            color="#a8eef5"
-            transmission={1}
-            thickness={0.9}
-            roughness={0.12}
-            ior={1.45}
+            color="#7fd3de"
+            roughness={0.1}
             metalness={0}
             clearcoat={1}
-            clearcoatRoughness={0.08}
-            iridescence={0.35}
-            iridescenceIOR={1.3}
-            attenuationColor="#127C91"
-            attenuationDistance={1.4}
-            envMapIntensity={1.4}
+            clearcoatRoughness={0.06}
+            iridescence={0.3}
+            envMapIntensity={1.2}
             flatShading
             transparent
-            opacity={0.96}
+            opacity={0.55}
+            depthWrite={false}
           />
         </mesh>
         <lineSegments geometry={edges}>
-          <lineBasicMaterial color="#bff3f8" transparent opacity={0.55} toneMapped={false} />
+          <lineBasicMaterial color="#127C91" transparent opacity={0.6} />
         </lineSegments>
       </group>
       {/* luminous core */}
@@ -168,7 +164,7 @@ function Crystal() {
       </mesh>
       <mesh ref={glow}>
         <sphereGeometry args={[0.55, 24, 24]} />
-        <meshBasicMaterial color={CYAN} transparent opacity={0.3} depthWrite={false} blending={THREE.AdditiveBlending} toneMapped={false} />
+        <meshBasicMaterial color={CYAN} transparent opacity={0.3} depthWrite={false} toneMapped={false} />
       </mesh>
       <mesh ref={lens} position={[0, 0, 0.19]}>
         <circleGeometry args={[0.065, 20]} />

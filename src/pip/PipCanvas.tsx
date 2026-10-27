@@ -183,6 +183,8 @@ export default function PipCanvas({ size, active }: { size: number; active: bool
   return (
     <Canvas
       style={{ width: size, height: size }}
+      // Measure the unscaled box: PIP is CSS-scaled into its dock and the tour card.
+      resize={{ offsetSize: true }}
       dpr={[1, 1.75]}
       frameloop={active ? 'always' : 'never'}
       gl={{ alpha: true, antialias: true, powerPreference: 'low-power' }}

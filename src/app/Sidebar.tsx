@@ -1,6 +1,6 @@
 import { Info, Layers, PanelLeft, X } from 'lucide-react'
 import { AnimatePresence, motion } from 'motion/react'
-import { NavLink } from 'react-router'
+import { NavLink, useMatch } from 'react-router'
 import { useApp } from '@/app/store'
 import { cx } from '@/lib/cx'
 import { spring } from '@/motion/tokens'
@@ -12,21 +12,19 @@ const row = 'flex h-9 items-center gap-3 rounded-[10px] text-[14px] font-medium 
 
 function NavRow({ item, collapsed, onNavigate }: { item: NavItem; collapsed: boolean; onNavigate?: () => void }) {
   const Icon = item.icon
+  // Plain values, not NavLink render functions: Radix Tooltip's asChild merges className as a string.
+  const isActive = !!useMatch({ path: item.to, end: item.to === '/' })
   const link = (
     <NavLink
       to={item.to}
       end={item.to === '/'}
       onClick={onNavigate}
       data-tour={item.tour}
-      className={({ isActive }) => cx(row, 'relative', collapsed ? 'justify-center' : 'px-3', isActive ? 'text-text-1' : 'text-text-2 hover:bg-black/[.04] hover:text-text-1')}
+      className={cx(row, 'relative', collapsed ? 'justify-center' : 'px-3', isActive ? 'text-text-1' : 'text-text-2 hover:bg-black/[.04] hover:text-text-1')}
     >
-      {({ isActive }) => (
-        <>
-          {isActive && <motion.span layoutId="nav-active" transition={spring.snappy} className="absolute inset-0 rounded-[10px] bg-white shadow-[var(--shadow-card)]" />}
-          <Icon className={cx('relative size-[18px] shrink-0', isActive ? 'text-cyan' : 'text-text-3')} strokeWidth={1.8} />
-          {!collapsed && <span className="relative truncate">{item.label}</span>}
-        </>
-      )}
+      {isActive && <motion.span layoutId="nav-active" transition={spring.snappy} className="absolute inset-0 rounded-[10px] bg-white shadow-[var(--shadow-card)]" />}
+      <Icon className={cx('relative size-[18px] shrink-0', isActive ? 'text-cyan' : 'text-text-3')} strokeWidth={1.8} />
+      {!collapsed && <span className="relative truncate">{item.label}</span>}
     </NavLink>
   )
   return collapsed ? (

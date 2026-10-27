@@ -18,7 +18,7 @@ export function Delta({
   return (
     <span
       className={cx(
-        'inline-flex h-5 items-center gap-1 rounded-[4px] px-1.5 text-[11.5px] font-medium tabular',
+        'inline-flex h-5 items-center gap-1 rounded-[4px] px-1.5 text-[11.5px] font-medium whitespace-nowrap tabular',
         good === null ? 'bg-[rgb(142_164_181/.1)] text-text-2' : good ? 'bg-verified-soft text-verified' : 'bg-amber-soft text-amber',
       )}
     >

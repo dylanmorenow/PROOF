@@ -1,13 +1,9 @@
 import { createBrowserRouter } from 'react-router'
-import { LedgerPage } from '@/features/ledger/LedgerPage'
-import { EvidencePage } from '@/features/evidence/EvidencePage'
-import { OperationsPage } from '@/features/operations/OperationsPage'
-import { ServiceDetailPage } from '@/features/operations/ServiceDetailPage'
 import { OverviewPage } from '@/features/overview/OverviewPage'
-import { PerformancePage } from '@/features/performance/PerformancePage'
 import { NotFoundPage } from '@/pages/PlaceholderPage'
 import { AppShell } from './AppShell'
 
+// The Overview ships in the main bundle; other pages load on first visit.
 // BASE_URL is '/PROOF/' on GitHub Pages and '/' locally.
 export const router = createBrowserRouter(
   [
@@ -15,11 +11,11 @@ export const router = createBrowserRouter(
       element: <AppShell />,
       children: [
         { index: true, element: <OverviewPage /> },
-        { path: 'operations', element: <OperationsPage /> },
-        { path: 'operations/:id', element: <ServiceDetailPage /> },
-        { path: 'evidence', element: <EvidencePage /> },
-        { path: 'performance', element: <PerformancePage /> },
-        { path: 'outcome-ledger', element: <LedgerPage /> },
+        { path: 'operations', lazy: async () => ({ Component: (await import('@/features/operations/OperationsPage')).OperationsPage }) },
+        { path: 'operations/:id', lazy: async () => ({ Component: (await import('@/features/operations/ServiceDetailPage')).ServiceDetailPage }) },
+        { path: 'evidence', lazy: async () => ({ Component: (await import('@/features/evidence/EvidencePage')).EvidencePage }) },
+        { path: 'performance', lazy: async () => ({ Component: (await import('@/features/performance/PerformancePage')).PerformancePage }) },
+        { path: 'outcome-ledger', lazy: async () => ({ Component: (await import('@/features/ledger/LedgerPage')).LedgerPage }) },
         { path: '*', element: <NotFoundPage /> },
       ],
     },

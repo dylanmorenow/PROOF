@@ -41,7 +41,7 @@ npm run build      # static output in dist/
 | 1 | Foundation, Overview, PIP, Tour A (Welcome) | Done |
 | 2 | Operations, Service Detail, Evidence Center, Performance, Tour B | Done |
 | 3 | Outcome Ledger, Tour C | Done |
-| 4 | Motion polish, QA, slide screenshots, judge demo script | Next |
+| 4 | Motion polish, QA, slide screenshots, judge demo script | Done |
 
 ## Deployment
 
@@ -63,6 +63,8 @@ src/
 scripts/        map generation, screenshots, tour and performance checks
 tests/          data contract tests
 ```
+
+**For the presentation** see [docs/DEMO-SCRIPT.md](docs/DEMO-SCRIPT.md) for a 5-minute judge walkthrough and [docs/screenshots](docs/screenshots) for slide-ready images (regenerate with `node scripts/slides.mjs`).
 
 See [docs/CUSTOMIZING.md](docs/CUSTOMIZING.md) to change colours, navigation, data, tour steps, PIP and motion.
 

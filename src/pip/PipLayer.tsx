@@ -1,6 +1,7 @@
 import { ArrowRight, Clock, X } from 'lucide-react'
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
 import { lazy, Suspense, useEffect, useRef, useState } from 'react'
+import { useApp } from '@/app/store'
 import { useTour } from '@/tour/tourStore'
 import { TOURS } from '@/tour/tours'
 import { cx } from '@/lib/cx'
@@ -40,6 +41,7 @@ export function PipLayer() {
   const touring = useTour((s) => !!s.tour)
   const startTour = useTour((s) => s.start)
   const reduce = useReducedMotion()
+  const collapsed = useApp((s) => s.sidebarCollapsed)
   const vp = useViewport()
   const [use3D] = useState(canRender3D)
   const [ready3D, setReady3D] = useState(false)
@@ -88,9 +90,14 @@ export function PipLayer() {
     }
   }, [pickerOpen, setPickerOpen])
 
-  const small = vp.w < 640
-  const dockSize = small ? 72 : DOCK
-  const dock = { x: vp.w - DOCK_MARGIN - dockSize / 2, y: vp.h - DOCK_MARGIN - dockSize / 2, size: dockSize }
+  // Tablet and desktop: PIP lives in the sidebar's empty space above its footer, so it never covers content.
+  // Phones have no sidebar, so it floats bottom-right.
+  const inSidebar = vp.w >= 768
+  const dockSize = !inSidebar ? 60 : collapsed ? 56 : DOCK
+  const dock = inSidebar
+    ? { x: (collapsed ? 72 : 232) / 2, y: vp.h - 150 - dockSize / 2, size: dockSize }
+    : { x: vp.w - DOCK_MARGIN - dockSize / 2, y: vp.h - DOCK_MARGIN - dockSize / 2, size: dockSize }
+  const dockTop = dock.y - dockSize / 2
   const at = anchor ?? dock
   const scale = at.size / BOX
 
@@ -100,7 +107,7 @@ export function PipLayer() {
       <div
         aria-hidden="true"
         className={cx('pointer-events-none fixed z-[44] rounded-full transition-opacity duration-500', anchor ? 'opacity-0' : 'opacity-100')}
-        style={{ width: dockSize, height: dockSize, right: DOCK_MARGIN, bottom: DOCK_MARGIN }}
+        style={{ width: dockSize, height: dockSize, left: dock.x - dockSize / 2, top: dockTop }}
       >
         <div className="absolute inset-0 rounded-full border border-white/70 bg-white/70 shadow-[var(--shadow-raised)] backdrop-blur-xl" />
       </div>
@@ -115,7 +122,7 @@ export function PipLayer() {
       >
         <button
           type="button"
-          aria-label={touring ? 'PIP, your guide' : 'PIP: open guided tours'}
+          aria-label={touring ? 'PIP, your guide' : 'Open guided tours with PIP'}
           aria-haspopup="menu"
           aria-expanded={pickerOpen}
           data-tour="pip"
@@ -153,9 +160,9 @@ export function PipLayer() {
               startTour('welcome')
             }}
             className="fixed z-[94] flex items-center gap-2 rounded-full border border-line bg-white/90 backdrop-blur-xl py-2 pr-2 pl-4 text-[13px] font-medium text-text-1 shadow-[var(--shadow-raised)] hover:bg-white"
-            style={{ right: DOCK_MARGIN + dockSize + 12, bottom: DOCK_MARGIN + dockSize / 2 - 19 }}
+            style={inSidebar ? { left: dock.x + dockSize / 2 + 12, top: dock.y - 19 } : { right: DOCK_MARGIN + dockSize + 12, bottom: DOCK_MARGIN + dockSize / 2 - 19 }}
           >
-            New here? Take the 90-second tour
+            New here? Take a quick tour
             <span className="grid size-6 place-items-center rounded-full bg-teal text-white">
               <ArrowRight className="size-3.5" />
             </span>
@@ -186,8 +193,8 @@ export function PipLayer() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 6, scale: 0.98, transition: { duration: 0.12 } }}
             transition={spring.smooth}
-            className="fixed z-[96] w-[320px] origin-bottom-right rounded-[18px] border border-line bg-white/90 p-2 backdrop-blur-xl shadow-[var(--shadow-raised)]"
-            style={{ right: DOCK_MARGIN, bottom: DOCK_MARGIN + dockSize + 12 }}
+            className={cx('fixed z-[96] w-[320px] rounded-[18px] border border-line bg-white/90 p-2 shadow-[var(--shadow-raised)] backdrop-blur-xl', inSidebar ? 'origin-bottom-left' : 'origin-bottom-right')}
+            style={inSidebar ? { left: 12, bottom: vp.h - dockTop + 12 } : { right: DOCK_MARGIN, bottom: DOCK_MARGIN + dockSize + 12 }}
             onPointerDown={(e) => e.stopPropagation()}
           >
             <div className="px-3 pt-2.5 pb-2">

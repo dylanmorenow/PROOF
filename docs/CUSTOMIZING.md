@@ -19,7 +19,9 @@
 ```bash
 node scripts/shoot.mjs http://localhost:5173/ out.png 1440 900 --full     # full-resolution screenshot
 node scripts/tour-check.mjs http://localhost:5173/ out-dir A 1440 900      # runs a tour, checks spotlight accuracy per step
-node scripts/perf-check.mjs gpu http://localhost:5173/                     # frame rates idle / during tour transitions
+node scripts/perf-check.mjs gpu http://localhost:5173/                     # frame rates idle and during tour transitions
+node scripts/qa.mjs http://localhost:5173/ out-dir                         # every page at 3 sizes, accounts, keyboard, reduced motion
+node scripts/slides.mjs                                                     # slide screenshots into docs/screenshots
 ```
 
 On Windows Git Bash, set `MSYS_NO_PATHCONV=1` before passing `/PROOF/`-style paths, or the shell rewrites them.

@@ -326,9 +326,8 @@ function TourOverlay({ tour }: { tour: TourDef }) {
         aria-describedby="tour-body"
         className={cx(
           'fixed top-0 left-0 rounded-[20px] border border-white/60 bg-white/85 shadow-[0_24px_60px_-12px_rgb(15_23_42/.35)] backdrop-blur-2xl backdrop-saturate-150',
-          isMobile && 'right-3',
         )}
-        style={{ width: isMobile ? undefined : CARD_W }}
+        style={{ width: isMobile ? 'calc(100% - 24px)' : CARD_W }}
         initial={{ opacity: 0, scale: 0.96 }}
         animate={cardPos ? { opacity: 1, scale: 1, x: cardPos.x, y: cardPos.y } : { opacity: 0 }}
         transition={reduce ? { duration: 0.12 } : { ...spring.smooth, opacity: { duration: 0.25 } }}

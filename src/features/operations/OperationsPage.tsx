@@ -77,11 +77,11 @@ export function OperationsPage() {
 
       <div className="grid grid-cols-1 gap-6 xl:grid-cols-12">
         <Card index={0} tour="ops.table" lens="B" className="xl:col-span-8" bodyClassName="overflow-x-auto">
-          <table className="w-full min-w-[620px] text-left text-[14px]">
+          <table className="w-full text-left text-[14px] md:min-w-[620px]">
             <thead>
               <tr className="text-[12.5px] text-text-2">
-                {['Work order', 'Region', 'Due', 'Evidence', 'Status'].map((h) => (
-                  <th key={h} className="px-4 py-3 font-medium whitespace-nowrap first:pl-5">
+                {['Work order', 'Region', 'Due', 'Evidence', 'Status'].map((h, i) => (
+                  <th key={h} className={cx('px-4 py-3 font-medium whitespace-nowrap first:pl-5', i > 0 && i < 4 && 'hidden md:table-cell')}>
                     {h}
                   </th>
                 ))}
@@ -96,7 +96,7 @@ export function OperationsPage() {
                     key={w.id}
                     tabIndex={0}
                     aria-selected={isSel}
-                    onClick={() => setParam('wo', isSel ? null : w.id)}
+                    onClick={() => (window.matchMedia('(min-width: 1280px)').matches ? setParam('wo', isSel ? null : w.id) : navigate(`/operations/${w.id}`))}
                     onDoubleClick={() => navigate(`/operations/${w.id}`)}
                     onKeyDown={(e) => e.key === 'Enter' && setParam('wo', w.id)}
                     className={cx('cursor-pointer border-t border-line transition-colors outline-none focus-visible:bg-surface-3', isSel ? 'bg-teal-soft' : 'hover:bg-surface-3')}
@@ -111,9 +111,9 @@ export function OperationsPage() {
                         </span>
                       </div>
                     </td>
-                    <td className="px-4 whitespace-nowrap text-text-2">{regionName(w.regionId)}</td>
-                    <td className="px-4 whitespace-nowrap text-text-2 tabular">{fmtDate(w.due, false)}</td>
-                    <td className="px-4">
+                    <td className="hidden px-4 whitespace-nowrap text-text-2 md:table-cell">{regionName(w.regionId)}</td>
+                    <td className="hidden px-4 whitespace-nowrap text-text-2 tabular md:table-cell">{fmtDate(w.due, false)}</td>
+                    <td className="hidden px-4 md:table-cell">
                       <ProofSummary {...proof} />
                     </td>
                     <td className="px-4">

@@ -37,7 +37,7 @@ export function SegmentedControl<T extends string>({
             title={o.title}
             onClick={() => onChange(o.value)}
             className={cx(
-              'relative z-0 inline-flex items-center justify-center gap-1.5 rounded-full font-medium transition-colors duration-150',
+              'relative z-0 inline-flex items-center justify-center gap-1.5 rounded-full font-medium whitespace-nowrap transition-colors duration-150',
               size === 'sm' ? 'h-6 px-2.5 text-[12px]' : 'h-7 px-3 text-[12.5px]',
               active ? 'text-text-1' : 'text-text-2 hover:text-text-1',
             )}

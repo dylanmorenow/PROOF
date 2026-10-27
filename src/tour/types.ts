@@ -19,11 +19,11 @@ export interface TourStep {
   prepare?: (ctx: TourContext) => void
   /** Undo `prepare` when leaving the step. */
   cleanup?: (ctx: TourContext) => void
+  /** The opening invitation: no counter or progress, Start/Not now buttons. */
+  intro?: boolean
   title: string
-  what: string
-  why: string
-  action: string
-  cta?: { label: string; run: (ctx: TourContext & { startTour: (id: string) => void; end: () => void }) => void }
+  /** One short paragraph: what this is and what it is for. */
+  body: string
 }
 
 export interface TourDef {

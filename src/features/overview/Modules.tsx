@@ -61,11 +61,11 @@ export function NeedsAttention({ data }: { data: OverviewData }) {
 
 /* ───────────── Proof Chain ───────────── */
 
-const STAGES: { key: keyof Funnel; label: string; caption: string; color: string }[] = [
-  { key: 'captured', label: 'Captured', caption: 'Recorded in the field', color: '#8794A1' },
-  { key: 'submitted', label: 'Submitted', caption: 'Uploaded to PROOF Room', color: '#127C91' },
-  { key: 'verified', label: 'Verified', caption: 'Checked against source', color: '#1A8A55' },
-  { key: 'acknowledged', label: 'Acknowledged', caption: 'Accepted by you', color: '#1A8A55' },
+const STAGES: { key: keyof Funnel; label: string; color: string }[] = [
+  { key: 'captured', label: 'Captured', color: '#8794A1' },
+  { key: 'submitted', label: 'Submitted', color: '#127C91' },
+  { key: 'verified', label: 'Verified', color: '#1A8A55' },
+  { key: 'acknowledged', label: 'Acknowledged', color: '#1A8A55' },
 ]
 
 export function ProofFunnel({ funnel }: { funnel: Funnel }) {
@@ -77,23 +77,19 @@ export function ProofFunnel({ funnel }: { funnel: Funnel }) {
       lens="C"
       title="Proof Chain this period"
       className="h-full"
-      bodyClassName="flex flex-1 flex-col px-5 pb-5"
+      bodyClassName="flex flex-1 flex-col px-5 pt-2 pb-6"
       actions={
         <Link to="/evidence" className="inline-flex items-center gap-1 text-[13px] font-medium text-cyan hover:underline">
           Evidence <ArrowUpRight className="size-3.5" />
         </Link>
       }
     >
-      <p className="mb-5 text-[13px] text-text-2">Uploaded is not verified. Each record is checked against its site, timestamp, signatory and file.</p>
-      <ul className="flex flex-col gap-4">
+      <ul className="flex flex-col gap-5">
         {STAGES.map((s) => {
           const v = funnel[s.key] as number
           return (
-            <li key={s.key} className="grid grid-cols-[150px_1fr_44px] items-center gap-3">
-              <span>
-                <span className="block text-[14px] font-medium text-text-1">{s.label}</span>
-                <span className="block text-[12px] text-text-3">{s.caption}</span>
-              </span>
+            <li key={s.key} className="grid grid-cols-[120px_1fr_44px] items-center gap-3">
+              <span className="text-[14px] font-medium text-text-1">{s.label}</span>
               <span className="h-2 overflow-hidden rounded-full bg-bg-1">
                 <span className="block h-full rounded-full transition-[width] duration-700" style={{ width: `${(v / max) * 100}%`, background: s.color }} />
               </span>
@@ -102,7 +98,6 @@ export function ProofFunnel({ funnel }: { funnel: Funnel }) {
           )
         })}
       </ul>
-      {funnel.recapture > 0 && <p className="mt-auto pt-5 text-[12.5px] text-amber">{funnel.recapture} record returned for re-capture</p>}
     </Card>
   )
 }

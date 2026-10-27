@@ -35,7 +35,7 @@ function useViewport() {
 }
 
 function TourOverlay({ tour }: { tour: TourDef }) {
-  const { index, direction, next, back, end, start } = useTour()
+  const { index, direction, next, back, end } = useTour()
   const step = tour.steps[index]
   const navigate = useNavigate()
   const location = useLocation()
@@ -213,7 +213,7 @@ function TourOverlay({ tour }: { tour: TourDef }) {
     computePosition(reference, card, {
       strategy: 'fixed',
       placement: (step.placement ?? 'bottom') as Placement,
-      middleware: [offset(16), flip({ padding: EDGE, fallbackAxisSideDirection: 'start' }), shift({ padding: EDGE })],
+      middleware: [offset(28), flip({ padding: EDGE, fallbackAxisSideDirection: 'start' }), shift({ padding: EDGE })],
     }).then(({ x, y }) => {
       if (!cancelled) setCardPos({ x, y: Math.max(EDGE, Math.min(y, vp.h - ch - EDGE)) })
     })
@@ -281,6 +281,9 @@ function TourOverlay({ tour }: { tour: TourDef }) {
   }, [end, next, back])
 
   const last = index === tour.steps.length - 1
+  // The intro invitation is not counted as a step.
+  const steps = tour.steps.filter((x) => !x.intro)
+  const stepNo = steps.indexOf(step) + 1
   const hasHole = !!box && phase === 'ready'
   const blockHole = hasHole && !step.interactive
 
@@ -311,7 +314,7 @@ function TourOverlay({ tour }: { tour: TourDef }) {
       {blockHole && <motion.div className="absolute top-0 left-0" style={{ x: hx, y: hy, width: hw, height: hh }} />}
 
       <div className="sr-only" aria-live="polite">
-        {`Step ${index + 1} of ${tour.steps.length}: ${step.title}`}
+        {step.intro ? step.title : `Step ${stepNo} of ${steps.length}, ${step.title}`}
       </div>
 
       {/* Explanation card */}
@@ -330,16 +333,9 @@ function TourOverlay({ tour }: { tour: TourDef }) {
         animate={cardPos ? { opacity: 1, scale: 1, x: cardPos.x, y: cardPos.y } : { opacity: 0 }}
         transition={reduce ? { duration: 0.12 } : { ...spring.smooth, opacity: { duration: 0.25 } }}
       >
-        <div className="flex items-start gap-3 px-5 pt-5">
-          <div ref={slotRef} className="relative size-14 shrink-0" aria-hidden="true">
-          </div>
-          <div className="min-w-0 flex-1 pt-1">
-            <div className="text-[12.5px] font-medium text-cyan">{tour.title}</div>
-            <div className="mt-0.5 text-[12px] text-text-2 tabular">
-              Step {index + 1} of {tour.steps.length}
-            </div>
-          </div>
-          <button onClick={() => end()} className="-mt-1 -mr-2 grid size-8 place-items-center rounded-full text-text-2 transition-colors hover:bg-black/5 hover:text-text-1" aria-label="Exit tour">
+        <div className="flex items-start justify-between px-5 pt-5">
+          <div ref={slotRef} className="size-14 shrink-0" aria-hidden="true" />
+          <button onClick={() => end()} className="-mr-2 grid size-8 place-items-center rounded-full text-text-3 transition-colors hover:bg-black/5 hover:text-text-1" aria-label="Exit tour">
             <X className="size-4" />
           </button>
         </div>
@@ -356,54 +352,40 @@ function TourOverlay({ tour }: { tour: TourDef }) {
               className="px-5 pt-3"
             >
               <h2 id="tour-title" ref={titleRef} tabIndex={-1} className="type-display text-[20px] leading-snug text-text-1 outline-none">
-                {phase === 'missing' ? 'This part isn’t on screen' : step.title}
+                {phase === 'missing' ? 'This part is not on screen' : step.title}
               </h2>
-              {phase === 'missing' ? (
-                <p id="tour-body" className="mt-2 text-[13.5px] leading-relaxed text-text-2">
-                  I couldn’t find “{step.title}” in the current layout — it may be hidden at this screen size. You can skip this step safely.
-                </p>
-              ) : (
-                <dl id="tour-body" className="mt-3 grid grid-cols-[40px_1fr] gap-x-2 gap-y-2.5 text-[14px] leading-snug">
-                  <dt className="pt-px text-[12px] font-medium text-text-3">What</dt>
-                  <dd className="text-text-1">{step.what}</dd>
-                  <dt className="pt-px text-[12px] font-medium text-text-3">Why</dt>
-                  <dd className="text-text-2">{step.why}</dd>
-                  <dt className="pt-px text-[12px] font-medium text-cyan">Try</dt>
-                  <dd className="text-text-2">{step.action}</dd>
-                </dl>
-              )}
+              <p id="tour-body" className="mt-2 text-[15px] leading-relaxed text-text-2">
+                {phase === 'missing' ? 'It may be hidden at this screen size. You can skip ahead.' : step.body}
+              </p>
             </motion.div>
           </AnimatePresence>
         </div>
 
-        <div className="mt-4 flex gap-1 px-5" aria-hidden="true">
-          {tour.steps.map((s, i) => (
-            <span key={s.id} className="relative h-[3px] flex-1 overflow-hidden rounded-full bg-black/[.07]">
-              <motion.span className="absolute inset-0 origin-left rounded-full bg-cyan" initial={false} animate={{ scaleX: i <= index ? 1 : 0, opacity: i === index ? 1 : 0.55 }} transition={{ duration: 0.35 }} />
-            </span>
-          ))}
-        </div>
-
-        <div className="flex items-center gap-2 px-5 pt-4 pb-5">
-          {!last && (
-            <button onClick={() => end()} className="mr-auto text-[12.5px] font-medium text-text-2 transition-colors hover:text-text-1">
-              Skip tour
-            </button>
+        <div className="flex items-center gap-2 px-5 pt-5 pb-5">
+          {step.intro ? (
+            <>
+              <Button size="sm" variant="ghost" className="ml-auto" onClick={() => end()}>
+                Not now
+              </Button>
+              <Button size="sm" variant="primary" onClick={next} aria-label="Start tour">
+                Start tour
+              </Button>
+            </>
+          ) : (
+            <>
+              <div className="mr-auto flex gap-1.5" aria-hidden="true">
+                {steps.map((s, i) => (
+                  <span key={s.id} className={cx('size-1.5 rounded-full transition-colors duration-300', i === stepNo - 1 ? 'bg-cyan' : 'bg-black/15')} />
+                ))}
+              </div>
+              <Button size="sm" variant="secondary" onClick={back} aria-label="Previous step">
+                <ArrowLeft /> Back
+              </Button>
+              <Button size="sm" variant="primary" onClick={next} aria-label={last ? 'Finish tour' : 'Next step'}>
+                {last ? 'Done' : 'Next'} {!last && <ArrowRight />}
+              </Button>
+            </>
           )}
-          {last && <span className="mr-auto hidden text-[11.5px] text-text-3 sm:inline">← → to navigate · Esc to exit</span>}
-          {index > 0 && (
-            <Button size="sm" variant="secondary" onClick={back} aria-label="Previous step">
-              <ArrowLeft /> Back
-            </Button>
-          )}
-          {step.cta && phase === 'ready' && (
-            <Button size="sm" variant="secondary" onClick={() => step.cta!.run({ ...ctxRef.current, startTour: start, end })}>
-              {step.cta.label}
-            </Button>
-          )}
-          <Button size="sm" variant="primary" onClick={next} aria-label={last ? 'Finish tour' : 'Next step'}>
-            {last ? 'Finish' : phase === 'missing' ? 'Skip step' : 'Next'} {!last && <ArrowRight />}
-          </Button>
         </div>
       </motion.div>
     </motion.div>

@@ -24,10 +24,8 @@ export function NetworkCard({ regions, selected, onSelect }: Props) {
       lens="B"
       title="Regional network"
       bodyClassName="px-3 pb-4 sm:px-5"
-      actions={<span className="text-[12.5px] text-text-3">Candidate nodes · proposed</span>}
     >
       <IndonesiaMap regions={ref} summaries={regions} selected={selected} onSelect={onSelect} />
-      <p className="px-1 text-[12px] text-text-3">Proposed under Option B — not existing PT Energy facilities. Geography: Natural Earth.</p>
     </Card>
   )
 }
@@ -47,10 +45,7 @@ export function RegionalSnapshot({ regions, selected, onSelect }: Props) {
               return (
                 <li key={r.regionId}>
                   <button onClick={() => onSelect(r.regionId)} className="flex w-full items-center gap-3 rounded-[12px] px-2 py-3 text-left transition-colors hover:bg-surface-3 active:bg-bg-1">
-                    <span className="flex-1">
-                      <span className="block text-[14px] font-medium text-text-1">{meta.name}</span>
-                      <span className="block text-[12.5px] text-text-2">{meta.area}</span>
-                    </span>
+                    <span className="flex-1 text-[14px] font-medium text-text-1">{meta.name}</span>
                     <span className="text-right">
                       <span className="block text-[15px] font-semibold text-text-1 tabular">{r.active}</span>
                       <span className="block text-[12px] text-text-3 tabular">{fmtPct(r.otd.pct, 0)} on time</span>
@@ -62,10 +57,7 @@ export function RegionalSnapshot({ regions, selected, onSelect }: Props) {
           </motion.ul>
         ) : (
           <motion.div key={region.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.15 }} className="flex h-full flex-col">
-            <p className="text-[13px] text-text-2">
-              {region.area} · {region.timezone}
-            </p>
-            <dl className="mt-4 grid grid-cols-2 gap-x-4 gap-y-5">
+            <dl className="grid grid-cols-2 gap-x-4 gap-y-5">
               <Metric label="Active operations" value={String(summary.active)} />
               <Metric label="On-time delivery" value={fmtPct(summary.otd.pct)} />
               <Metric label="Evidence verified" value={fmtPct(summary.evidence.pct)} />

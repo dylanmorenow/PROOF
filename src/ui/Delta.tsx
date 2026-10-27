@@ -12,7 +12,7 @@ export function Delta({
   goodWhen?: 'up' | 'down'
   digits?: number
 }) {
-  if (value == null || !Number.isFinite(value)) return <span className="text-[12px] text-text-3">—</span>
+  if (value == null || !Number.isFinite(value)) return <span className="text-[12px] text-text-3">n/a</span>
   const flat = Math.abs(value) < 0.05
   const good = flat ? null : value > 0 === (goodWhen === 'up')
   return (

@@ -165,7 +165,7 @@ export function IndonesiaMap({
               <Stat label="On time" value={fmtPct(hoveredSummary.otd.pct, 0)} />
               <Stat label="Exceptions" value={String(hoveredSummary.openExceptions)} warn={hoveredSummary.openExceptions > 0} />
             </div>
-            <div className="mt-2.5 text-[11.5px] leading-snug text-text-3">Proposed node — not an existing facility.</div>
+            <div className="mt-2.5 text-[11.5px] leading-snug text-text-3">Proposed node, not an existing facility.</div>
           </motion.div>
         )}
       </AnimatePresence>

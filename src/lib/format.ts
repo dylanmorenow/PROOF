@@ -6,7 +6,7 @@ const ZONES: Record<string, string> = { '+07:00': 'WIB', '+08:00': 'WITA', '+09:
 
 export const fmtInt = (n: number) => n.toLocaleString('en-US')
 
-export const fmtPct = (n: number | null | undefined, digits = 1) => (n == null ? '—' : `${n.toFixed(digits)}%`)
+export const fmtPct = (n: number | null | undefined, digits = 1) => (n == null ? 'n/a' : `${n.toFixed(digits)}%`)
 
 export const fmtUsd = (n: number) => `US$${Math.round(n).toLocaleString('en-US')}`
 

@@ -1,4 +1,4 @@
-// Guided-tour scripts. Each step: What it is → Why it matters → What you can do (see docs/CUSTOMIZING.md).
+// Guided-tour scripts. Each step is one short paragraph: what this is and what it is for (see docs/CUSTOMIZING.md).
 import { useApp } from '@/app/store'
 import type { TourDef } from './types'
 
@@ -7,16 +7,15 @@ const closeMobileNav = () => useApp.getState().setMobileNav(false)
 export const WELCOME: TourDef = {
   id: 'welcome',
   title: 'Welcome to PROOF Room',
-  summary: 'The command center in ten stops',
-  duration: '90 s',
+  summary: 'The command center in one minute',
+  duration: '1 min',
   steps: [
     {
       id: 'intro',
       route: '/',
-      title: "Hi, I'm PIP.",
-      what: 'Your PROOF Intelligence Partner. I will walk you through PROOF Room in about 90 seconds.',
-      why: 'PROOF Room answers three questions: what is happening, is it meeting expectations, and what proves it.',
-      action: 'Press Next, or use the arrow keys. Esc exits at any time.',
+      intro: true,
+      title: "Hi, I'm PIP",
+      body: 'Want a quick look around PROOF Room? It takes about a minute.',
     },
     {
       id: 'hero',
@@ -24,9 +23,7 @@ export const WELCOME: TourDef = {
       target: 'overview.hero',
       placement: 'bottom-start',
       title: 'Your command center',
-      what: 'A plain-language summary of your whole portfolio, written from live operational records.',
-      why: 'You see the situation in one sentence before you read a single chart.',
-      action: 'Switch customer account or reporting period in the header — every number follows.',
+      body: 'A one line summary of all your operations right now, so you know how much is running and what needs you before opening any detail.',
     },
     {
       id: 'active',
@@ -34,9 +31,7 @@ export const WELCOME: TourDef = {
       target: 'kpi.active',
       placement: 'bottom-start',
       title: 'Active operations',
-      what: 'Every work order now mobilizing, in progress, awaiting evidence, awaiting your sign-off, or on hold.',
-      why: 'The coloured bar shows where work is waiting — and who it is waiting on.',
-      action: 'Select the tile to open the full service tracker.',
+      body: 'Every job that is still open, from mobilizing to awaiting your sign-off. The colored bar shows where work is waiting, so you know what to follow up first.',
     },
     {
       id: 'otd',
@@ -44,9 +39,7 @@ export const WELCOME: TourDef = {
       target: 'kpi.otd',
       placement: 'bottom',
       title: 'On-time delivery',
-      what: 'The share of milestones completed on or before their planned date in this period.',
-      why: 'Milestone-level timing shows reliability early, long before a job is late overall.',
-      action: 'Compare periods with 30D · 90D · YTD at the top right.',
+      body: 'The share of milestones finished on or before plan this period. It shows how reliable delivery is long before a whole job runs late.',
     },
     {
       id: 'sla',
@@ -54,19 +47,15 @@ export const WELCOME: TourDef = {
       target: 'kpi.sla',
       placement: 'bottom',
       title: 'Operational performance',
-      what: 'Service-level attainment: orders you acknowledged as complete by their contracted due date.',
-      why: 'This is the promise in your contract, measured on closed and accepted work only.',
-      action: 'The sparkline shows the last eight months; hover the label for the exact definition.',
+      body: 'How many closed jobs met their contracted due date. This is the service promise in your contract, measured on finished work.',
     },
     {
       id: 'evidence',
       route: '/',
       target: 'kpi.evidence',
       placement: 'bottom',
-      title: 'Evidence verification',
-      what: 'Evidence checked against its source — site, timestamp, signatory, file integrity — within 48 hours of upload.',
-      why: 'Uploaded is not verified. Only verified evidence supports a reported result.',
-      action: 'Select the tile to review records in the Evidence Center.',
+      title: 'Evidence verified',
+      body: 'Photos, reports and logs checked against their source within 48 hours. Only verified evidence backs a reported result, so this is the number you can trust.',
     },
     {
       id: 'exceptions',
@@ -74,9 +63,7 @@ export const WELCOME: TourDef = {
       target: 'kpi.exceptions',
       placement: 'bottom-end',
       title: 'Open exceptions',
-      what: 'Deviations from plan that are still open: access, weather, parts, evidence quality, scope or safety.',
-      why: 'Exceptions are reported, not hidden — and the ones that need your decision are counted separately.',
-      action: 'Review them in “Needs attention” further down the page.',
+      body: 'Anything that went off plan and is still unresolved, like site access, weather or parts. Problems surface early, and the ones that need your decision are counted separately.',
     },
     {
       id: 'network',
@@ -84,10 +71,8 @@ export const WELCOME: TourDef = {
       target: 'overview.map',
       placement: 'right-start',
       interactive: true,
-      title: 'Archipelago network',
-      what: 'Four candidate coordination nodes proposed under Option B: Batam, Surabaya, Balikpapan and Sorong.',
-      why: 'Regional coordination is how delivery stays reliable across thousands of kilometres of islands.',
-      action: 'Try it: hover or select a node to see its regional picture.',
+      title: 'Regional network',
+      body: 'Four proposed regional hubs that coordinate delivery across the islands. Hover or tap a hub to see its workload and performance.',
     },
     {
       id: 'sidebar',
@@ -96,10 +81,8 @@ export const WELCOME: TourDef = {
       placement: 'right-start',
       prepare: ({ isMobile }) => isMobile && useApp.getState().setMobileNav(true),
       cleanup: closeMobileNav,
-      title: 'Navigate the workspace',
-      what: 'Operations, Evidence and Performance hold the detail behind every number on this page.',
-      why: 'The Outcome Ledger is kept separate: it demonstrates an independent Paid-on-Proof concept.',
-      action: 'Turn on Strategy lens below to tag each module with the option it delivers.',
+      title: 'Navigation',
+      body: 'Operations, Evidence and Performance hold the detail behind every number here. The Outcome Ledger shows the separate Paid-on-Proof concept.',
     },
     {
       id: 'next',
@@ -108,9 +91,7 @@ export const WELCOME: TourDef = {
       placement: 'right-start',
       interactive: true,
       title: 'Start with a work order',
-      what: 'These items are waiting on you: completed services to acknowledge, and exceptions that need a decision.',
-      why: 'Each one opens a full record with its milestones, evidence and history.',
-      action: 'Open WO-26-0417 — a gas turbine inspection awaiting your acknowledgment.',
+      body: 'These items are waiting on you, completed jobs to acknowledge and issues that need a decision. Open one to see its milestones, evidence and history.',
     },
   ],
 }
@@ -119,15 +100,15 @@ export const SERVICE: TourDef = {
   id: 'service',
   title: 'Service tracking',
   summary: 'Follow one work order from plan to proof',
-  duration: '75 s',
+  duration: '1 min',
   steps: [],
 }
 
 export const LEDGER: TourDef = {
   id: 'ledger',
   title: 'Outcome Ledger',
-  summary: 'The independent Paid-on-Proof concept',
-  duration: '75 s',
+  summary: 'The Paid-on-Proof concept',
+  duration: '1 min',
   steps: [],
 }
 

@@ -27,7 +27,7 @@ for (let i = 0; i < 20; i++) {
     const ring = document.querySelector('.tour-ring')
     const card = document.querySelector('[role="dialog"][aria-labelledby="tour-title"]')
     const title = document.getElementById('tour-title')?.textContent
-    const step = card?.querySelector('.tabular')?.textContent
+    const step = ''
     const r = ring?.getBoundingClientRect()
     const c = card?.getBoundingClientRect()
     const visible = ring && getComputedStyle(ring).opacity !== '0'
@@ -60,7 +60,7 @@ for (let i = 0; i < 20; i++) {
     await finish.click()
     break
   }
-  await page.getByRole('button', { name: /Next step|Skip step/ }).click()
+  await page.getByRole('button', { name: /Next step|Skip step|Start tour/ }).click()
 }
 await page.waitForTimeout(900)
 await page.screenshot({ path: `${out}/after.png` })

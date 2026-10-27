@@ -6,8 +6,8 @@ import { Seal } from '@/ui/Seal'
 
 const MAPPING = [
   { tag: 'Option B', title: 'Archipelago Delivery Resilience', body: 'Regional network view, candidate coordination nodes, supplier qualification status, and milestone-level delivery tracking.', tone: '!text-cyan' },
-  { tag: 'Option C', title: 'Digital-First Customer Experience', body: 'The customer workspace itself: live service tracking, KPI reporting, the Evidence Center and structured customer acknowledgments.', tone: '!text-verified' },
-  { tag: 'Independent concept', title: 'Paid-on-Proof Contracts', body: 'The Outcome Ledger. A separate strategic proposal — not deployed, not funded and not part of the Option C digital investment.', tone: '!text-amber' },
+  { tag: 'Option C', title: 'Digital-First Customer Experience', body: 'The customer workspace itself, with live service tracking, KPI reporting, the Evidence Center and structured customer acknowledgments.', tone: '!text-verified' },
+  { tag: 'Independent concept', title: 'Paid-on-Proof Contracts', body: 'The Outcome Ledger. A separate strategic proposal that is not deployed, not funded and not part of the Option C digital investment.', tone: '!text-amber' },
 ]
 
 export function AboutDialog() {
@@ -22,7 +22,7 @@ export function AboutDialog() {
             <div className="min-w-0 flex-1">
               <Dialog.Title className="type-display text-[22px] font-[620] text-text-1">About this prototype</Dialog.Title>
               <Dialog.Description className="mt-1 text-[13.5px] leading-relaxed text-text-2">
-                PROOF Room shows the product implied by the <span className="text-text-1">P.R.O.O.F. Strategy — From Price-Led Bidding to Proof-Led Growth</span>: the command center
+                PROOF Room shows the product implied by the <span className="text-text-1">P.R.O.O.F. Strategy, From Price-Led Bidding to Proof-Led Growth</span>. It is the command center
                 for verifiable energy operations.
               </Dialog.Description>
             </div>
@@ -43,13 +43,13 @@ export function AboutDialog() {
 
           <ul className="mt-6 space-y-2 text-[13px] leading-relaxed text-text-2">
             <li>• PT Energy, its customers, sites, vendors, people and all figures are fictional demonstration data.</li>
-            <li>• Batam, Surabaya, Balikpapan and Sorong are proposed candidate coordination nodes — not existing PT Energy facilities.</li>
+            <li>• Batam, Surabaya, Balikpapan and Sorong are proposed candidate coordination nodes, not existing PT Energy facilities.</li>
             <li>• No industrial system, customer data, or payment infrastructure is connected. Actions change local demo state only.</li>
-            <li>• Map geography: Natural Earth (public domain).</li>
+            <li>• Map geography from Natural Earth (public domain).</li>
           </ul>
 
           <div className="mt-6 flex items-center justify-between gap-3 border-t border-line pt-5">
-            <span className="text-[12px] text-text-3">Press L for the Strategy lens · [ to collapse the sidebar</span>
+            <span className="text-[12px] text-text-3">Press L for the Strategy lens and [ to collapse the sidebar</span>
             <Button
               size="sm"
               onClick={() => {

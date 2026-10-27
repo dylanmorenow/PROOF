@@ -116,13 +116,13 @@ export const HERO_WORK_ORDER = 'WO-26-0417'
 export const RECAPTURE_WORK_ORDER = 'WO-26-0407'
 
 const OPEN_EXCEPTIONS: Omit<ServiceException, 'id' | 'status'>[] = [
-  { workOrderId: 'WO-26-0417', title: 'Stage-1 blade coating loss needs an engineering decision', category: 'Scope change', severity: 'medium', raisedOn: '2026-10-24', owner: 'Bayu Nugroho', needsCustomer: true, detail: 'Borescope image B-3 shows coating loss within limits. Customer engineering to decide: monitor at next interval or schedule repair.' },
+  { workOrderId: 'WO-26-0417', title: 'Stage-1 blade coating loss needs an engineering decision', category: 'Scope change', severity: 'medium', raisedOn: '2026-10-24', owner: 'Bayu Nugroho', needsCustomer: true, detail: 'Borescope image B-3 shows coating loss within limits. Customer engineering to decide whether to monitor at the next interval or schedule a repair.' },
   { workOrderId: 'WO-26-0394', title: 'Switchgear outage window not confirmed', category: 'Access & permits', severity: 'high', raisedOn: '2026-10-21', owner: 'Sari Wulandari', needsCustomer: true, detail: 'Isolation of bay 3 requires a 6-hour outage window from site operations. Crew on standby.' },
   { workOrderId: 'WO-26-0393', title: 'Replacement impeller awaiting customs clearance', category: 'Parts & materials', severity: 'high', raisedOn: '2026-10-19', owner: 'Yohanes Mandacan', needsCustomer: false, detail: 'OEM impeller held for import documentation. Work paused after disassembly; unit isolated and tagged.' },
-  { workOrderId: 'WO-26-0407', title: 'Calibration photo set rejected — gauge readings illegible', category: 'Evidence quality', severity: 'low', raisedOn: '2026-10-25', owner: 'Fitri Handayani', needsCustomer: false, detail: 'Verifier rejected v1: glare on 4 of 12 gauges. Re-capture scheduled with the crew.' },
+  { workOrderId: 'WO-26-0407', title: 'Calibration photo set rejected, gauge readings illegible', category: 'Evidence quality', severity: 'low', raisedOn: '2026-10-25', owner: 'Fitri Handayani', needsCustomer: false, detail: 'Verifier rejected v1: glare on 4 of 12 gauges. Re-capture scheduled with the crew.' },
   { workOrderId: 'WO-26-0391', title: 'Sea state above jetty access limit', category: 'Weather & sea state', severity: 'medium', raisedOn: '2026-10-26', owner: 'Rizky Pratama', needsCustomer: false, detail: 'Jetty access suspended for one shift under the site marine procedure. Work resequenced to onshore tasks.' },
   { workOrderId: 'WO-26-0389', title: 'Hot-work permit renewal pending', category: 'Access & permits', severity: 'medium', raisedOn: '2026-10-26', owner: 'Fitri Handayani', needsCustomer: true, detail: 'Permit expires at end of shift; renewal requested from the site permit office.' },
-  { workOrderId: 'WO-26-0399', title: 'Additional passing valve found — scope change proposed', category: 'Scope change', severity: 'medium', raisedOn: '2026-10-23', owner: 'Agus Santoso', needsCustomer: true, detail: 'Valve XV-214 failed the seat-leak test. Change proposal issued for repair under the same mobilisation.' },
+  { workOrderId: 'WO-26-0399', title: 'Additional passing valve found, scope change proposed', category: 'Scope change', severity: 'medium', raisedOn: '2026-10-23', owner: 'Agus Santoso', needsCustomer: true, detail: 'Valve XV-214 failed the seat-leak test. Change proposal issued for repair under the same mobilisation.' },
 ]
 
 /* ───────────── outcome contracts (Independent Innovation Demo — fictional) ───────────── */
@@ -413,7 +413,7 @@ export function buildDataset(): Dataset {
       rec.type = 'photo-set'
       rec.verifiedAt = undefined
       rec.acknowledgedAt = undefined
-      rec.versions = [{ version: 1, uploadedAt: v1, outcome: 'rejected', note: 'Glare on 4 of 12 gauges — readings illegible.', reviewedAt: '2026-10-25T10:12:00+08:00' }]
+      rec.versions = [{ version: 1, uploadedAt: v1, outcome: 'rejected', note: 'Glare on 4 of 12 gauges made readings illegible.', reviewedAt: '2026-10-25T10:12:00+08:00' }]
       rec.verifier = 'Rina Marlina'
     }
   }
@@ -429,7 +429,7 @@ export function buildDataset(): Dataset {
     resolvedOn: '2026-10-22',
     owner: 'Bayu Nugroho',
     needsCustomer: false,
-    detail: 'Seal kit supplied from the Surabaya node stock. Remediation completed 22 Oct; quality check passed the same day.',
+    detail: 'Seal kit supplied from the Surabaya node stock. Remediation completed 22 Oct and quality check passed the same day.',
   })
 
   /* ── scheduled (not yet active) ── */
@@ -475,7 +475,7 @@ export function buildDataset(): Dataset {
       return {
         contractId: c.id,
         type: 'availability-log',
-        title: `Availability log — ${new Date(`${month}-01T00:00:00Z`).toLocaleString('en-GB', { month: 'long', timeZone: 'UTC' })} 2026`,
+        title: `Availability log ${new Date(`${month}-01T00:00:00Z`).toLocaleString('en-GB', { month: 'long', timeZone: 'UTC' })} 2026`,
         stage: acknowledged ? 'acknowledged' : 'verified',
         capturedAt,
         uploadedAt,
@@ -556,7 +556,7 @@ export function buildDataset(): Dataset {
         versions: [{ version: 1, uploadedAt: stamp('2026-10-16', 7 * 60 + 10, r), outcome: 'verified', note: 'Permit number, validity window and isolation points confirmed.', reviewedAt: stamp('2026-10-16', 9 * 60 + 45, r) }],
       }),
       mk({
-        milestoneKey: 'execute', type: 'photo-set', title: 'Borescope image set — stages 1–3 (48 images)', stage: 'verified',
+        milestoneKey: 'execute', type: 'photo-set', title: 'Borescope image set, stages 1 to 3 (48 images)', stage: 'verified',
         capturedAt: stamp('2026-10-19', 14 * 60 + 12, r), uploadedAt: stamp('2026-10-19', 16 * 60 + 40, r), verifiedAt: stamp('2026-10-20', 10 * 60 + 5, r),
         source: 'Borescope unit BS-07 via field tablet', verifier: 'Maya Anggraini', sizeKb: 186_400,
         versions: [{ version: 1, uploadedAt: stamp('2026-10-19', 16 * 60 + 40, r), outcome: 'verified', note: 'EXIF timestamps and asset tag GT-CS2-A verified.', reviewedAt: stamp('2026-10-20', 10 * 60 + 5, r) }],
@@ -565,7 +565,7 @@ export function buildDataset(): Dataset {
         milestoneKey: 'quality', type: 'measurement', title: 'Vibration & performance check after remediation', stage: 'verified',
         capturedAt: stamp('2026-10-22', 11 * 60 + 30, r), uploadedAt: stamp('2026-10-22', 12 * 60 + 2, r), verifiedAt: stamp('2026-10-22', 17 * 60 + 48, r),
         source: 'Condition-monitoring export', verifier: 'Maya Anggraini', sizeKb: 2_340,
-        versions: [{ version: 1, uploadedAt: stamp('2026-10-22', 12 * 60 + 2, r), outcome: 'verified', note: 'Readings within OEM limits; sensor IDs match asset register.', reviewedAt: stamp('2026-10-22', 17 * 60 + 48, r) }],
+        versions: [{ version: 1, uploadedAt: stamp('2026-10-22', 12 * 60 + 2, r), outcome: 'verified', note: 'Readings within OEM limits and sensor IDs match the asset register.', reviewedAt: stamp('2026-10-22', 17 * 60 + 48, r) }],
       }),
       mk({
         milestoneKey: 'report', type: 'service-report', title: 'Hot-section inspection report', stage: 'verified',
@@ -573,7 +573,7 @@ export function buildDataset(): Dataset {
         source: 'Engineering report · Borneo Integrity Works', verifier: 'Rina Marlina', sizeKb: 5_820, pages: 14,
         versions: [
           { version: 1, uploadedAt: stamp('2026-10-23', 16 * 60 + 2, r), outcome: 'rejected', note: 'Missing signatory page for vendor inspector.', reviewedAt: stamp('2026-10-23', 18 * 60 + 40, r) },
-          { version: 2, uploadedAt: stamp('2026-10-24', 9 * 60 + 30, r), outcome: 'verified', note: 'Signatures complete; findings match image set references.', reviewedAt: stamp('2026-10-24', 16 * 60 + 15, r) },
+          { version: 2, uploadedAt: stamp('2026-10-24', 9 * 60 + 30, r), outcome: 'verified', note: 'Signatures complete and findings match the image set.', reviewedAt: stamp('2026-10-24', 16 * 60 + 15, r) },
         ],
       }),
     ]

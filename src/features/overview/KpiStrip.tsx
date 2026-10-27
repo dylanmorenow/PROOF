@@ -25,7 +25,7 @@ const pct = (n: number) => `${n.toFixed(1)}%`
 
 export function KpiStrip({ data }: { data: OverviewData }) {
   const ratioTile = (r: OverviewData['otd'], color: string) => ({
-    value: r.ratio.pct == null ? '—' : <CountUp value={r.ratio.pct} format={pct} />,
+    value: r.ratio.pct == null ? 'n/a' : <CountUp value={r.ratio.pct} format={pct} />,
     footer: (
       <>
         <Delta value={r.delta} />
@@ -37,7 +37,7 @@ export function KpiStrip({ data }: { data: OverviewData }) {
     {
       tour: 'kpi.active',
       label: 'Active operations',
-      definition: 'Work orders mobilizing, in progress, awaiting evidence, awaiting your sign-off, or on hold.',
+      definition: 'Work orders not yet closed',
       to: '/operations',
       value: <CountUp value={data.active.length} format={(n) => fmtInt(Math.round(n))} />,
       caption: `across ${data.regionsActive} regions`,
@@ -45,7 +45,7 @@ export function KpiStrip({ data }: { data: OverviewData }) {
         <div className="flex h-1.5 w-full gap-[2px] overflow-hidden rounded-full">
           {ACTIVE_STATUS_ORDER.map((s) => {
             const n = data.active.filter((a) => a.status === s).length
-            return n ? <span key={s} title={`${STATUS_META[s].label}: ${n}`} className={cx('h-full', toneDot[STATUS_META[s].tone])} style={{ flexGrow: n }} /> : null
+            return n ? <span key={s} title={`${n} ${STATUS_META[s].label.toLowerCase()}`} className={cx('h-full', toneDot[STATUS_META[s].tone])} style={{ flexGrow: n }} /> : null
           })}
         </div>
       ),
@@ -53,7 +53,7 @@ export function KpiStrip({ data }: { data: OverviewData }) {
     {
       tour: 'kpi.otd',
       label: 'On-time delivery',
-      definition: 'Milestones completed in the period on or before their planned date.',
+      definition: 'Milestones finished on or before plan',
       to: '/performance',
       caption: `${fmtInt(data.otd.ratio.num)} of ${fmtInt(data.otd.ratio.den)} milestones`,
       ...ratioTile(data.otd, '#127C91'),
@@ -61,7 +61,7 @@ export function KpiStrip({ data }: { data: OverviewData }) {
     {
       tour: 'kpi.sla',
       label: 'Operational performance',
-      definition: 'Service-level attainment: orders acknowledged complete in the period by their contracted due date.',
+      definition: 'Orders closed by their contracted due date',
       to: '/performance',
       caption: `${data.sla.ratio.num} of ${data.sla.ratio.den} closed within SLA`,
       ...ratioTile(data.sla, '#5B6B7B'),
@@ -69,15 +69,15 @@ export function KpiStrip({ data }: { data: OverviewData }) {
     {
       tour: 'kpi.evidence',
       label: 'Evidence verified',
-      definition: 'Evidence checked against its source within 48 hours of upload. Uploaded is not the same as verified.',
+      definition: 'Records checked against source within 48 hours',
       to: '/evidence',
-      caption: 'within 48 h of upload',
+      caption: `${data.evidence.ratio.num} of ${data.evidence.ratio.den} records`,
       ...ratioTile(data.evidence, '#1A8A55'),
     },
     {
       tour: 'kpi.exceptions',
       label: 'Open exceptions',
-      definition: 'Deviations from plan that are not yet resolved.',
+      definition: 'Deviations from plan still unresolved',
       to: '/operations',
       value: <span className={data.open.length ? 'text-amber' : ''}>{data.open.length}</span>,
       caption: `${data.open.filter((x) => x.needsCustomer).length} need your decision`,

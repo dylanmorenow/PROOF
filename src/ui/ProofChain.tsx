@@ -35,7 +35,7 @@ export function ProofChain({ stage, showLabel = false, className }: { stage: Pro
   const color = STAGE_COLOR[stage]
   const label = stage === 'recapture' ? STAGE_LABEL.recapture : STEPS[n - 1]
   return (
-    <span className={cx('inline-flex items-center gap-2', className)} title={`Proof Chain: ${label}`}>
+    <span className={cx('inline-flex items-center gap-2', className)} title={label}>
       <svg width="50" height="10" viewBox="0 0 50 10" role="img" aria-label={`Proof Chain: ${label}`} className="shrink-0">
         <path d="M8 5h34" stroke="rgb(142 164 181 / .25)" strokeWidth="1" />
         <path d={`M8 5h${Math.max(0, (n - 1) * 13)}`} stroke={color} strokeOpacity=".7" strokeWidth="1" />
